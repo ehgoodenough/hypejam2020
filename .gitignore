@@ -1,0 +1,13 @@
+# Dependencies
+node_modules
+
+# Temporary
+.DS_Store
+*.log
+._*
+
+# Artifacts
+builds
+
+# To-do Lists
+todo
