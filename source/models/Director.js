@@ -115,10 +115,16 @@ class Step {
     static generateAnimatedSequence({animation, stage, events = {}}) {
         const sequence = []
 
+        let maxmark = 0
+
         animation.timelines = {}
         animation.keyframes.forEach((keyframe) => {
             animation.timelines[keyframe.key] = animation.timelines[keyframe.key] || []
             animation.timelines[keyframe.key].push(keyframe)
+
+            if(maxmark < keyframe.mark) {
+                maxmark = keyframe.mark
+            }
         })
         // Keyset.forEach(animation.timelines, (timeline) => {
         //     timeline.sort()
@@ -126,7 +132,7 @@ class Step {
 
         return [
             {
-                "duration": animation.duration,
+                "duration": maxmark,
                 "execute": function(currentDuration) {
                     const tweenFrame = {"mark": currentDuration}
 
@@ -406,11 +412,13 @@ Animations["explode"] = (step) => {
 }
 
 const SMOKE_COUNT = 3 // per tile
-const SMOKE_NUDGE = 16 // in pixels
+const SMOKE_NUDGE = 4 // in pixels
+const SCREEN_SHAKE_COUNT = 8
+const SCREEN_SHAKE_TIME = 5
 Animations["explosion"] = (step) => {
     const keyframes = []
-    step.positions.forEach((positions, counter) => {
-        positions.forEach((position) => {
+    step.explosions.forEach((explosion, counter) => {
+        explosion.positions.forEach((position) => {
             for(let i = 0; i < SMOKE_COUNT; i += 1) {
                 const key = "explosion:" + shortid.generate()
                 keyframes.push({
@@ -421,8 +429,8 @@ Animations["explosion"] = (step) => {
                         "y": position.y,
                     },
                     "nudge": {
-                        "x": Math.round((Math.random() * 4 + 2)) * (Math.random() < 0.5 ? -1 : +1),
-                        "y": Math.round((Math.random() * 4 + 2)) * (Math.random() < 0.5 ? -1 : +1),
+                        "x": Math.round(Random.range(2, 6)) * Random.sign(),
+                        "y": Math.round(Random.range(2, 6)) * Random.sign(),
                     },
                     "circle": {"radius": 12, "color": 0xfeeae0},
                     // "image": require("assets/images/explosion.flash.png"),
@@ -430,20 +438,42 @@ Animations["explosion"] = (step) => {
                 keyframes.push({
                     "key": key,
                     "mark": (counter * 100) + 500,
-                    "opacity": 1,
+                    "timing": Timings.easeOut,
                     "circle": {"radius": 0, "color": 0xfeeae0},
+                    "toBeDeleted": true,
                 })
                 // keyframes.push({
                 //     "key": key,
-                //     "mark": (counter * 250) + 500,
+                //     "mark": (counter * 100) + 500 + 250,
+                //     "circle": {"radius": 1, "color": 0xfeeae0},
                 //     "opacity": 0,
-                //     "toBeDeleted": true,
                 // })
             }
         })
     })
-    return {
-        "duration": 10 * 1000, // TODO: DETECT THIS AUTOMATICALLY
-        "keyframes": keyframes
+    for(var i = 0; i < SCREEN_SHAKE_COUNT; i += 1) {
+        keyframes.push({
+            "mark": i * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
+            "key": "camera",
+            "nudge": {
+                "x": Math.round(Random.range(2, 2)) * Random.sign(),
+                "y": Math.round(Random.range(2, 2)) * Random.sign(),
+            }
+        })
+    }
+    keyframes.push({
+        "mark": (i + 1) * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
+        "key": "camera",
+        "nudge": {"x": 0, "y": 0},
+    })
+    return {keyframes}
+}
+
+class Random {
+    static sign() {
+        return Math.random() < 0.5 ? -1 : +1
+    }
+    static range(min, max) {
+        return (Math.random() * (max - min)) + min
     }
 }

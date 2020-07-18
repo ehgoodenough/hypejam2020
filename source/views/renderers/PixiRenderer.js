@@ -66,6 +66,9 @@ function createPixiComponent(pixi, entity) {
         //     pixi.addChild(text)
         //     return
         // }
+        if(entity.type == "camera") {
+            return
+        }
         let sprite = undefined
         if(entity.circle != undefined) {
             const graphics = new Pixi.Graphics()
@@ -158,6 +161,18 @@ export default class PixiRenderer {
             )
         }
         app.stage = createPixi(this.props.views)
+        if(this.props.camera != undefined) {
+            if(this.props.camera.position != undefined) {
+                app.stage.position.x = this.props.camera.position.x
+                app.stage.position.y = this.props.camera.position.y
+                if(this.props.camera.nudge != undefined) {
+                    app.stage.position.x += this.props.camera.nudge.x || 0
+                    app.stage.position.y += this.props.camera.nudge.y || 0
+                }
+                app.stage.position.x *= -1
+                app.stage.position.y *= -1
+            }
+        }
         return (
             <div class="PixiRenderer" id="pixi"/>
         )

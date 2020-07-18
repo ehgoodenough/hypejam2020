@@ -1,6 +1,8 @@
 import Index from "index"
 import * as Preact from "preact"
 
+import frame from "data/frame.js"
+
 import "views/Frame.view.less"
 
 export default class Frame {
@@ -13,8 +15,8 @@ export default class Frame {
     }
     get style() {
         return {
-            "width": Index.frame.width + "em",
-            "height": Index.frame.height + "em"
+            "width": frame.width + "em",
+            "height": frame.height + "em"
         }
     }
 }

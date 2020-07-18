@@ -10,7 +10,9 @@ export default class Game {
     render() {
         return (
             <div class="Game">
-                <PixiRenderer views={views()}/>
+                <PixiRenderer
+                    views={Object.values(Index.entities)}
+                    camera={Index.entities["camera"]}/>
             </div>
         )
     }
@@ -18,6 +20,6 @@ export default class Game {
 
 function views() {
     return [
-        Object.values(Index.entities)
+
     ]
 }

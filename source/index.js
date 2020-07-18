@@ -40,6 +40,7 @@ let loop = new Yaafloop(function(delta) {
 // Frame //
 //////////
 
+import frame from "data/frame.js"
 import frem from "frem"
 
-frem(index.frame)
+frem(frame)
