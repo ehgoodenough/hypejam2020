@@ -70,8 +70,8 @@ class Step {
     update(delta) {
         this.hasStarted = true
 
-        this.time += delta.s
-        this.accumulatedTime += delta.s
+        this.time += delta.ms
+        this.accumulatedTime += delta.ms
 
         while(this.sequence.length > 0) {
             // if(this.sequence[0] instanceof Function) {
@@ -190,15 +190,9 @@ class Step {
                                 delete Index.entities[currentFrame.key]
                             }
 
-                            // if(currentFrame.rendertype != undefined) {
-                            //     entity.rendertype = currentFrame.rendertype
-                            // }
-                            // if(currentFrame.color != undefined) {
-                            //     entity.color = currentFrame.color
-                            // }
-                            // if(currentFrame.radius != undefined) {
-                            //     entity.radius = currentFrame.radius
-                            // }
+                            if(currentFrame.circle != undefined) {
+                                entity.circle = currentFrame.circle
+                            }
 
                             if(timeline[1] == undefined) {
                                 return
@@ -231,6 +225,13 @@ class Step {
 
                             if(currentFrame.whiteout != undefined && nextFrame.whiteout != undefined) {
                                 entity.whiteout = tween(currentFrame.whiteout, nextFrame.whiteout, timing(progress))
+                            }
+
+                            if(currentFrame.circle != undefined && nextFrame.circle != undefined) {
+                                entity.circle = {
+                                    "radius": tween(currentFrame.circle.radius, nextFrame.circle.radius, timing(progress)),
+                                    "color": tween(currentFrame.circle.color, nextFrame.circle.color, timing(progress)),
+                                }
                             }
                         })
                     }
@@ -273,7 +274,7 @@ const SHAKE_TIME = 0.05
 const SHAKE = 8
 Animations["explode"] = (step) => {
     return {
-        "duration": 10, // TODO: DETECT THIS AUTOMATICALLY
+        "duration": 10 * 1000, // TODO: DETECT THIS AUTOMATICALLY
         "keyframes": [
             {
                 "mark": 0,
@@ -282,49 +283,49 @@ Animations["explode"] = (step) => {
                 "whiteout": 0,
             },
             {
-                "mark": 0.5,
+                "mark": 0.5 * 1000,
                 "key": step.key,
                 "scale": {"x": 0.75, "y": 1.25},
                 "whiteout": 1,
             },
             {
-                "mark": 0.5,
+                "mark": 0.5 * 1000,
                 "key": step.key,
                 "scale": {"x": 1.5, "y": 0.5},
                 "whiteout": 0,
             },
             {
-                "mark": 1,
+                "mark": 1 * 1000,
                 "key": step.key,
                 "scale": {"x": 0.75, "y": 1.25},
                 "whiteout": 1,
             },
             {
-                "mark": 1,
+                "mark": 1 * 1000,
                 "key": step.key,
                 "scale": {"x": 1.5, "y": 0.5},
                 "whiteout": 0,
             },
             {
-                "mark": 1.5,
+                "mark": 1.5 * 1000,
                 "key": step.key,
                 "scale": {"x": 0.75, "y": 1.25},
                 "whiteout": 1,
             },
             {
-                "mark": 1.5,
+                "mark": 1.5 * 1000,
                 "key": step.key,
                 "scale": {"x": 1.5, "y": 0.5},
                 "whiteout": 0,
             },
             {
-                "mark": 2,
+                "mark": 2 * 1000,
                 "key": step.key,
                 "scale": {"x": 0.75, "y": 1.25},
                 "whiteout": 1,
             },
             {
-                "mark": 2 + WAIT + (SHAKE_TIME * 1),
+                "mark": (2 + WAIT + (SHAKE_TIME * 1)) * 1000,
                 "key": step.key,
                 "nudge": {
                     "x": (Math.random() * SHAKE) - (SHAKE / 2),
@@ -404,26 +405,45 @@ Animations["explode"] = (step) => {
     }
 }
 
+const SMOKE_COUNT = 3 // per tile
+const SMOKE_NUDGE = 16 // in pixels
 Animations["explosion"] = (step) => {
     const keyframes = []
     step.positions.forEach((positions, counter) => {
         positions.forEach((position) => {
-            const key = "explosion:" + shortid.generate()
-            keyframes.push({
-                "mark": counter * 0.1,
-                "key": key,
-                "position": position,
-                "image": require("assets/images/explosion.flash.png"),
-            })
-            keyframes.push({
-                "mark": counter * 0.1 + 0.2,
-                "key": key,
-                "toBeDeleted": true,
-            })
+            for(let i = 0; i < SMOKE_COUNT; i += 1) {
+                const key = "explosion:" + shortid.generate()
+                keyframes.push({
+                    "key": key,
+                    "mark": (counter * 100) + (Math.random() * 100),
+                    "position": {
+                        "x": position.x,
+                        "y": position.y,
+                    },
+                    "nudge": {
+                        "x": Math.round((Math.random() * 4 + 2)) * (Math.random() < 0.5 ? -1 : +1),
+                        "y": Math.round((Math.random() * 4 + 2)) * (Math.random() < 0.5 ? -1 : +1),
+                    },
+                    "circle": {"radius": 12, "color": 0xfeeae0},
+                    // "image": require("assets/images/explosion.flash.png"),
+                })
+                keyframes.push({
+                    "key": key,
+                    "mark": (counter * 100) + 500,
+                    "opacity": 1,
+                    "circle": {"radius": 0, "color": 0xfeeae0},
+                })
+                // keyframes.push({
+                //     "key": key,
+                //     "mark": (counter * 250) + 500,
+                //     "opacity": 0,
+                //     "toBeDeleted": true,
+                // })
+            }
         })
     })
     return {
-        "duration": 10, // TODO: DETECT THIS AUTOMATICALLY
+        "duration": 10 * 1000, // TODO: DETECT THIS AUTOMATICALLY
         "keyframes": keyframes
     }
 }

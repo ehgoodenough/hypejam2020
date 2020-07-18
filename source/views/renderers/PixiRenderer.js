@@ -66,29 +66,40 @@ function createPixiComponent(pixi, entity) {
         //     pixi.addChild(text)
         //     return
         // }
-        if(entity.rendertype == "circle") {
+        let sprite = undefined
+        if(entity.circle != undefined) {
             const graphics = new Pixi.Graphics()
-            graphics.beginFill(entity.color)
+            graphics.beginFill(entity.circle.color)
             graphics.lineStyle(0)
-            graphics.drawCircle(entity.position.x, entity.position.y, entity.radius)
+            // let x = entity.position.x
+            // let y = entity.position.y
+            // if(entity.nudge != undefined) {
+            //     x += entity.nudge.x || 0
+            //     y += entity.nudge.y || 0
+            // }
+            graphics.drawCircle(0, 0, entity.circle.radius)
             graphics.endFill()
             graphics.zIndex = 1000000
-            pixi.addChild(graphics)
-            return
+            // pixi.addChild(graphics)
+            // return
+            sprite = graphics
+        } else {
+            if(Loader.resources[entity.image] == undefined) {
+                console.log("Could not find image resource in loader.")
+                return
+            }
+            sprite = new Pixi.Sprite(Loader.resources[entity.image].texture)
         }
-        if(Loader.resources[entity.image] == undefined) {
-            console.log("Could not find image resource in loader.")
-            return
-        }
-        const sprite = new Pixi.Sprite(Loader.resources[entity.image].texture)
 
-        sprite.position.x = entity.position.x
-        sprite.position.y = entity.position.y
-        sprite.zIndex = entity.position.stack
+        if(entity.position != undefined) {
+            sprite.position.x = entity.position.x
+            sprite.position.y = entity.position.y
+            sprite.zIndex = entity.position.stack
+        }
         // THIS IS A VERY SPECIFIC ATTRIBUTE
         if(entity.nudge != undefined) {
-            view.position.x += entity.nudge.x || 0
-            view.position.y += entity.nudge.y || 0
+            sprite.position.x += entity.nudge.x || 0
+            sprite.position.y += entity.nudge.y || 0
         }
         if(entity.opacity !== undefined) {
             sprite.alpha = entity.opacity

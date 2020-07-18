@@ -6,9 +6,10 @@ const CENTER_ANCHOR = {"x": 0.5, "y": 0.5}
 const CENTER_BOTTOMISH_ANCHOR = {"x": 0.5, "y": 0.75}
 
 const resources = [
-    {"file": require("assets/images/red-monkey.png"), "defaultAnchor": CENTER_BOTTOMISH_ANCHOR},
-    {"file": require("assets/images/bomb1.png"), "defaultAnchor": CENTER_BOTTOMISH_ANCHOR},
-    {"file": require("assets/images/explosion.flash.png"), "defaultAnchor": CENTER_BOTTOMISH_ANCHOR},
+    {"file": require("assets/images/red-monkey.png"), "defaultAnchor": CENTER_ANCHOR},
+    {"file": require("assets/images/bomb1.png"), "defaultAnchor": CENTER_ANCHOR},
+    {"file": require("assets/images/explosion.flash.png"), "defaultAnchor": CENTER_ANCHOR},
+    {"file": require("assets/images/explosion.smoke.png"), "defaultAnchor": CENTER_ANCHOR},
 ]
 
 const loader = new Pixi.Loader()

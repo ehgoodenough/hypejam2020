@@ -31,6 +31,7 @@ import View from "views/Mount.view.js"
 import Loader from "views/renderers/Loader.js"
 
 let loop = new Yaafloop(function(delta) {
+    // delta.ms /= 8
     if(Loader.isDone) index.update(delta)
     this.view = Preact.render(<View/>, document.body, this.view)
 })
