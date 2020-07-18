@@ -9,7 +9,7 @@ Pixi.utils.skipHello()
 Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST
 // renderer.roundPixels = true
 
-const frame = {"width": 16, "height": 9, "resolution": 20}
+const frame = {"width": 16, "height": 9, "resolution": 24}
 
 const app = new Pixi.Application({
     "width": frame.width * frame.resolution,

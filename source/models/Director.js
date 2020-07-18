@@ -5,6 +5,7 @@ import Geometry from "models/utility/Geometry.js"
 import Directions from "models/utility/Directions.js"
 import Timings from "models/utility/Timings.js"
 
+import shortid from "shortid"
 import bezier from "bezier-easing"
 function tween(alpha, omega, progress) {
     return alpha + ((omega - alpha) * progress)
@@ -404,22 +405,25 @@ Animations["explode"] = (step) => {
 }
 
 Animations["explosion"] = (step) => {
+    const keyframes = []
+    step.positions.forEach((positions, counter) => {
+        positions.forEach((position) => {
+            const key = "explosion:" + shortid.generate()
+            keyframes.push({
+                "mark": counter * 0.1,
+                "key": key,
+                "position": position,
+                "image": require("assets/images/explosion.flash.png"),
+            })
+            keyframes.push({
+                "mark": counter * 0.1 + 0.2,
+                "key": key,
+                "toBeDeleted": true,
+            })
+        })
+    })
     return {
         "duration": 10, // TODO: DETECT THIS AUTOMATICALLY
-        "keyframes": [
-            {
-                "mark": 0,
-                "key": "explosion:0",
-                "scale": {"x": 1, "y": 1},
-                "position": step.position,
-                "image": require("assets/images/explosion.flash.png"),
-            },
-            {
-                "mark": 0.2,
-                "key": "explosion:0",
-                // "scale": {"x": 1.1, "y": 1.1},
-                "toBeDeleted": true,
-            },
-        ],
+        "keyframes": keyframes
     }
 }
