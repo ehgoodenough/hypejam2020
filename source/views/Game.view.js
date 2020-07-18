@@ -18,8 +18,17 @@ export default class Game {
 function views() {
     const views = []
     views.push({
-        "image": require("assets/images/red-monkey.png"),
+        "image": require("assets/images/bomb1.png"),
         "position": Index.bomb.position,
+        "test": true,
+        // "scale": {
+        //     "x": 1,
+        //     "y": 0.5,
+        // },
+        // "outline": {
+        //     "thickness": 1,
+        //     "color": 0xfeeae0,
+        // }
     })
     return views
 }

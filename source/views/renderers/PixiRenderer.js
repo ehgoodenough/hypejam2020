@@ -1,7 +1,7 @@
 import Index from "index"
 import * as Pixi from "pixi.js"
 import * as Preact from "preact"
-// import {OutlineFilter} from "@pixi/filter-outline"
+import {OutlineFilter} from "@pixi/filter-outline"
 
 Pixi.utils.skipHello()
 Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST
@@ -19,8 +19,12 @@ const app = new Pixi.Application({
 // RESOURCES //
 //////////////
 
+const TOP_LEFT_ANCHOR = {"x": 0, "y": 0}
+const CENTER_ANCHOR = {"x": 0.5, "y": 0.5}
+
 const resources = [
-    {"file": require("assets/images/red-monkey.png"), "defaultAnchor": {"x": 0.5, "y": 0.5}},
+    {"file": require("assets/images/red-monkey.png"), "defaultAnchor": CENTER_ANCHOR},
+    {"file": require("assets/images/bomb1.png"), "defaultAnchor": CENTER_ANCHOR},
 ]
 
 const loader = new Pixi.Loader()
@@ -110,13 +114,30 @@ function createPixiComponent(pixi, entity) {
             sprite.filters.push(filter)
         }
 
+        if(entity.whiteout != undefined) {
+            sprite.filters = sprite.filters || []
+            const filter = new Pixi.filters.ColorMatrixFilter()
+            filter.alpha = entity.whiteout || 0
+            filter.contrast(10, true)
+            // filter.blackAndWhite(false)
+            // filter.browni(true)
+            // filter.brightness(1, true)
+            // filter.desaturate()
+            // filter.hue(90, true)
+            // filter.kodachrome(true)
+            // filter.lsd(true)
+            // filter.polaroid(true)
+            // filter.technicolor(true)
+            // filter.vintage(true)
+            sprite.filters.push(filter)
+        }
+
         if(entity.scale != undefined) {
             sprite.scale.x = entity.scale.x || 1
             sprite.scale.y = entity.scale.y || 1
         }
 
         if(entity.outline != undefined) {
-
             sprite.filters = sprite.filters || []
             sprite.filters.push(new OutlineFilter(entity.outline.thickness, entity.outline.color))
         }
