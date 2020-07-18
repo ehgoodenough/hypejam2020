@@ -70,9 +70,9 @@ function createPixiComponent(pixi, entity) {
             return
         }
         let sprite = undefined
-        if(entity.circle != undefined) {
+        if(entity.radius != undefined) {
             const graphics = new Pixi.Graphics()
-            graphics.beginFill(entity.circle.color)
+            graphics.beginFill(entity.color)
             graphics.lineStyle(0)
             // let x = entity.position.x
             // let y = entity.position.y
@@ -80,7 +80,7 @@ function createPixiComponent(pixi, entity) {
             //     x += entity.nudge.x || 0
             //     y += entity.nudge.y || 0
             // }
-            graphics.drawCircle(0, 0, entity.circle.radius)
+            graphics.drawCircle(0, 0, entity.radius)
             graphics.endFill()
             graphics.zIndex = 1000000
             // pixi.addChild(graphics)
@@ -173,9 +173,10 @@ export default class PixiRenderer {
                 app.stage.position.y *= -1
             }
         }
-        return (
-            <div class="PixiRenderer" id="pixi"/>
-        )
+        return [
+            <div class="PixiRenderer" id="pixi"/>,
+            <div class="Flash" style={{"backgroundColor": this.props.camera && this.props.camera.color}}/>
+        ]
     }
     componentDidMount() {
         document.getElementById("pixi").appendChild(app.view)

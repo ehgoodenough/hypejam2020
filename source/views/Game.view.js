@@ -17,9 +17,3 @@ export default class Game {
         )
     }
 }
-
-function views() {
-    return [
-
-    ]
-}

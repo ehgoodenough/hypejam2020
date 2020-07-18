@@ -10,6 +10,30 @@ import bezier from "bezier-easing"
 function tween(alpha, omega, progress) {
     return alpha + ((omega - alpha) * progress)
 }
+import rgb2hsv from "rgb-hsv"
+import hsv2rgb from "hsv-rgb"
+function colortween(a, b, progress) {
+    const aRGB = [
+        a >> 16,
+        a >> 8 & 0xff,
+        a & 0xff,
+    ]
+    const bRGB = [
+        b >> 16,
+        b >> 8 & 0xff,
+        b & 0xff,
+    ]
+    const aHSV = rgb2hsv(...aRGB)
+    const bHSV = rgb2hsv(...bRGB)
+    const cHSV = [
+        tween(aHSV[0], bHSV[0], progress),
+        tween(aHSV[1], bHSV[1], progress),
+        tween(aHSV[2], bHSV[2], progress),
+    ]
+    const cRGB = hsv2rgb(...cHSV)
+    const c = ((1 << 24) + (cRGB[0] << 16) + (cRGB[1] << 8) + cRGB[2] | 0)
+    return c
+}
 
 export default new class Director {
     constructor() {
@@ -167,6 +191,7 @@ class Step {
                                 entity.position = {
                                     "x": currentFrame.position.x,
                                     "y": currentFrame.position.y,
+                                    "stack": currentFrame.position.stack,
                                 }
                             }
 
@@ -196,8 +221,14 @@ class Step {
                                 delete Index.entities[currentFrame.key]
                             }
 
-                            if(currentFrame.circle != undefined) {
-                                entity.circle = currentFrame.circle
+                            if(currentFrame.radius != undefined) {
+                                entity.radius = currentFrame.radius
+                            }
+                            if(currentFrame.color != undefined) {
+                                entity.color = currentFrame.color
+                            }
+                            if(currentFrame.flash != undefined) {
+                                entity.flash = currentFrame.flash
                             }
 
                             if(timeline[1] == undefined) {
@@ -212,6 +243,7 @@ class Step {
                                 entity.position = {
                                     "x": tween(currentFrame.position.x, nextFrame.position.x, timing(progress)),
                                     "y": tween(currentFrame.position.y, nextFrame.position.y, timing(progress)),
+                                    "stack": tween(currentFrame.position.stack, nextFrame.position.stack, timing(progress)),
                                 }
                             }
 
@@ -233,11 +265,12 @@ class Step {
                                 entity.whiteout = tween(currentFrame.whiteout, nextFrame.whiteout, timing(progress))
                             }
 
-                            if(currentFrame.circle != undefined && nextFrame.circle != undefined) {
-                                entity.circle = {
-                                    "radius": tween(currentFrame.circle.radius, nextFrame.circle.radius, timing(progress)),
-                                    "color": tween(currentFrame.circle.color, nextFrame.circle.color, timing(progress)),
-                                }
+                            if(currentFrame.radius != undefined && nextFrame.radius != undefined) {
+                                entity.radius = tween(currentFrame.radius, nextFrame.radius, timing(progress))
+                            }
+
+                            if(currentFrame.color != undefined && nextFrame.color != undefined) {
+                                entity.color = colortween(currentFrame.color, nextFrame.color, timing(progress))
                             }
                         })
                     }
@@ -427,30 +460,37 @@ Animations["explosion"] = (step) => {
                     "position": {
                         "x": position.x,
                         "y": position.y,
+                        "stack": 2,
                     },
                     "nudge": {
                         "x": Math.round(Random.range(2, 6)) * Random.sign(),
                         "y": Math.round(Random.range(2, 6)) * Random.sign(),
                     },
-                    "circle": {"radius": 12, "color": 0xfeeae0},
+                    "radius": 12,
+                    "color": 0xfeeae0,
                     // "image": require("assets/images/explosion.flash.png"),
                 })
                 keyframes.push({
                     "key": key,
                     "mark": (counter * 100) + 500,
                     "timing": Timings.easeOut,
-                    "circle": {"radius": 0, "color": 0xfeeae0},
+                    "radius": 0,
+                    "color": 0x543935,
                     "toBeDeleted": true,
                 })
-                // keyframes.push({
-                //     "key": key,
-                //     "mark": (counter * 100) + 500 + 250,
-                //     "circle": {"radius": 1, "color": 0xfeeae0},
-                //     "opacity": 0,
-                // })
             }
         })
     })
+    // keyframes.push({
+    //     "mark": 0,
+    //     "key": "camera",
+    //     "color": "#feeae0",
+    // })
+    // keyframes.push({
+    //     "mark": 10,
+    //     "key": "camera",
+    //     "color": 0x000000,
+    // })
     for(var i = 0; i < SCREEN_SHAKE_COUNT; i += 1) {
         keyframes.push({
             "mark": i * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
