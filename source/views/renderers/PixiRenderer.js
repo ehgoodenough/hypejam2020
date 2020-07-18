@@ -3,6 +3,8 @@ import * as Pixi from "pixi.js"
 import * as Preact from "preact"
 import {OutlineFilter} from "@pixi/filter-outline"
 
+import Loader from "views/renderers/Loader.js"
+
 Pixi.utils.skipHello()
 Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST
 // renderer.roundPixels = true
@@ -16,37 +18,11 @@ const app = new Pixi.Application({
 })
 
 ////////////////
-// RESOURCES //
-//////////////
-
-const TOP_LEFT_ANCHOR = {"x": 0, "y": 0}
-const CENTER_ANCHOR = {"x": 0.5, "y": 0.5}
-const CENTER_BOTTOMISH_ANCHOR = {"x": 0.5, "y": 0.75}
-
-const resources = [
-    {"file": require("assets/images/red-monkey.png"), "defaultAnchor": CENTER_BOTTOMISH_ANCHOR},
-    {"file": require("assets/images/bomb1.png"), "defaultAnchor": CENTER_BOTTOMISH_ANCHOR},
-]
-
-const loader = new Pixi.Loader()
-loader.add(resources.map((resource) => resource.file)).load(function() {
-    resources.forEach((resource) => {
-        if(resource.defaultAnchor != undefined
-        && loader.resources[resource.file] != undefined
-        && loader.resources[resource.file].texture != undefined) {
-            loader.resources[resource.file].texture.defaultAnchor.x = resource.defaultAnchor.x
-            loader.resources[resource.file].texture.defaultAnchor.y = resource.defaultAnchor.y
-        }
-    })
-    loader.isDone = true
-})
-
-////////////////
 // RENDERING //
 //////////////
 
 function createPixi(views) {
-    if(loader.isDone != true) {
+    if(Loader.isDone != true) {
         return new Pixi.Container()
     }
     const pixi = new Pixi.Container()
@@ -90,15 +66,30 @@ function createPixiComponent(pixi, entity) {
         //     pixi.addChild(text)
         //     return
         // }
-        if(loader.resources[entity.image] == undefined) {
+        if(entity.rendertype == "circle") {
+            const graphics = new Pixi.Graphics()
+            graphics.beginFill(entity.color)
+            graphics.lineStyle(0)
+            graphics.drawCircle(entity.position.x, entity.position.y, entity.radius)
+            graphics.endFill()
+            graphics.zIndex = 1000000
+            pixi.addChild(graphics)
+            return
+        }
+        if(Loader.resources[entity.image] == undefined) {
             console.log("Could not find image resource in loader.")
             return
         }
-        const sprite = new Pixi.Sprite(loader.resources[entity.image].texture)
+        const sprite = new Pixi.Sprite(Loader.resources[entity.image].texture)
 
         sprite.position.x = entity.position.x
         sprite.position.y = entity.position.y
         sprite.zIndex = entity.position.stack
+        // THIS IS A VERY SPECIFIC ATTRIBUTE
+        if(entity.nudge != undefined) {
+            view.position.x += entity.nudge.x || 0
+            view.position.y += entity.nudge.y || 0
+        }
         if(entity.opacity !== undefined) {
             sprite.alpha = entity.opacity
         }
@@ -146,11 +137,11 @@ function createPixiComponent(pixi, entity) {
 
 export default class PixiRenderer {
     render() {
-        if(loader.isDone != true) {
+        if(Loader.isDone != true) {
             return (
                 <div class="PixiRenderer" id="pixi">
                     <div class="Progress">
-                        {Math.round(loader.progress) + "%"}
+                        {Math.round(Loader.progress) + "%"}
                     </div>
                 </div>
             )

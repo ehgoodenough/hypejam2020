@@ -28,9 +28,10 @@ import * as Preact from "preact"
 import Yaafloop from "yaafloop"
 
 import View from "views/Mount.view.js"
+import Loader from "views/renderers/Loader.js"
 
 let loop = new Yaafloop(function(delta) {
-    index.update(delta)
+    if(Loader.isDone) index.update(delta)
     this.view = Preact.render(<View/>, document.body, this.view)
 })
 

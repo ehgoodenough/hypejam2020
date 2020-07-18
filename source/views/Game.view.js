@@ -18,26 +18,6 @@ export default class Game {
 
 function views() {
     return [
-        Object.values(Index.entities).map((entity) => {
-            const view = {}
-            view.position = entity.position
-            view.scale = entity.scale
-            view.whiteout = entity.whiteout
-            if(entity.position != undefined
-            && entity.nudge != undefined) {
-                view.position = {
-                    "x": entity.position.x + entity.nudge.x,
-                    "y": entity.position.y + entity.nudge.y,
-                }
-            }
-            if(entity.type == "bomb") {
-                view.image = require("assets/images/bomb1.png")
-                // view.outline = {
-                //     "thickness": 1,
-                //     "color": 0xfeeae0,
-                // }
-            }
-            return view
-        })
+        Object.values(Index.entities)
     ]
 }

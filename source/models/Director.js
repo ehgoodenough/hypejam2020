@@ -131,23 +131,16 @@ class Step {
 
                     if(animation.timelines != undefined) {
                         Keyset.forEach(animation.timelines, (timeline) => {
-                            if(timeline[0] == undefined || timeline[1] == undefined) {
-                                return
-                            }
-                            if(timeline[1].mark < tweenFrame.mark) {
+                            if(timeline[1] != undefined
+                            && timeline[1].mark < tweenFrame.mark) {
                                 return timeline.shift()
                             }
-                            if(timeline[0].mark > tweenFrame.mark) {
+                            if(timeline[0] != undefined
+                            && timeline[0].mark > tweenFrame.mark) {
                                 return
                             }
 
                             const currentFrame = timeline[0]
-                            const nextFrame = timeline[1]
-
-                            const progress = Math.max(0, Math.min(1, (tweenFrame.mark - currentFrame.mark) / (nextFrame.mark - currentFrame.mark)))
-
-                            const timing = nextFrame.timing || Timings.linear
-                            // TODO: Let each attribute set a separate timing function
 
                             // // TODO: Only trigger these once.
                             // if(events[currentKeyframe.event] instanceof Function) {
@@ -157,9 +150,68 @@ class Step {
                             //     Audiomix.trigger(currentKeyframe.audio))
                             // }
 
-                            const entity = Index.entities[nextFrame.key]
+                            let entity = Index.entities[currentFrame.key]
                             if(entity == undefined) {
+                                Index.entities[currentFrame.key] = entity = {
+                                    "key": currentFrame.key
+                                }
+                            }
+                            if(currentFrame.position != undefined) {
+                                entity.position = {
+                                    "x": currentFrame.position.x,
+                                    "y": currentFrame.position.y,
+                                }
+                            }
+
+                            if(currentFrame.scale != undefined) {
+                                entity.scale = {
+                                    "x": currentFrame.scale.x,
+                                    "y": currentFrame.scale.y,
+                                }
+                            }
+
+                            if(currentFrame.nudge != undefined) {
+                                entity.nudge = {
+                                    "x": currentFrame.nudge.x,
+                                    "y": currentFrame.nudge.y,
+                                }
+                            }
+
+                            if(currentFrame.whiteout != undefined) {
+                                entity.whiteout = currentFrame.whiteout
+                            }
+
+                            if(currentFrame.image != undefined) {
+                                entity.image = currentFrame.image
+                            }
+
+                            if(currentFrame.toBeDeleted == true) {
+                                delete Index.entities[currentFrame.key]
+                            }
+
+                            // if(currentFrame.rendertype != undefined) {
+                            //     entity.rendertype = currentFrame.rendertype
+                            // }
+                            // if(currentFrame.color != undefined) {
+                            //     entity.color = currentFrame.color
+                            // }
+                            // if(currentFrame.radius != undefined) {
+                            //     entity.radius = currentFrame.radius
+                            // }
+
+                            if(timeline[1] == undefined) {
                                 return
+                            }
+                            const nextFrame = timeline[1]
+
+                            const progress = Math.max(0, Math.min(1, (tweenFrame.mark - currentFrame.mark) / (nextFrame.mark - currentFrame.mark)))
+                            const timing = nextFrame.timing || Timings.linear // TODO: Let each attribute set a separate timing function
+
+                            if(currentFrame.position != undefined && nextFrame.position != undefined) {
+                                entity.position = {
+                                    "x": tween(currentFrame.position.x, nextFrame.position.x, timing(progress)),
+                                    "y": tween(currentFrame.position.y, nextFrame.position.y, timing(progress)),
+                                }
                             }
 
                             if(currentFrame.scale != undefined && nextFrame.scale != undefined) {
@@ -199,12 +251,25 @@ Steps["explode"] = class extends Step {
     }
 }
 
+Steps["explosion"] = class extends Step {
+    constructor(step) {
+        super(step)
+
+        this.sequence = Step.generateAnimatedSequence({
+            "animation": Animations["explosion"](step),
+        })
+    }
+}
+
 /////////////////
 // ANIMATIONS //
 ///////////////
 
 const Animations = {}
 
+const WAIT = 0.5
+const SHAKE_TIME = 0.05
+const SHAKE = 8
 Animations["explode"] = (step) => {
     return {
         "duration": 10, // TODO: DETECT THIS AUTOMATICALLY
@@ -337,6 +402,24 @@ Animations["explode"] = (step) => {
         ],
     }
 }
-const WAIT = 0.5
-const SHAKE_TIME = 0.05
-const SHAKE = 8
+
+Animations["explosion"] = (step) => {
+    return {
+        "duration": 10, // TODO: DETECT THIS AUTOMATICALLY
+        "keyframes": [
+            {
+                "mark": 0,
+                "key": "explosion:0",
+                "scale": {"x": 1, "y": 1},
+                "position": step.position,
+                "image": require("assets/images/explosion.flash.png"),
+            },
+            {
+                "mark": 0.2,
+                "key": "explosion:0",
+                // "scale": {"x": 1.1, "y": 1.1},
+                "toBeDeleted": true,
+            },
+        ],
+    }
+}
