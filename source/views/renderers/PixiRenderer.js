@@ -21,10 +21,11 @@ const app = new Pixi.Application({
 
 const TOP_LEFT_ANCHOR = {"x": 0, "y": 0}
 const CENTER_ANCHOR = {"x": 0.5, "y": 0.5}
+const CENTER_BOTTOMISH_ANCHOR = {"x": 0.5, "y": 0.75}
 
 const resources = [
-    {"file": require("assets/images/red-monkey.png"), "defaultAnchor": CENTER_ANCHOR},
-    {"file": require("assets/images/bomb1.png"), "defaultAnchor": CENTER_ANCHOR},
+    {"file": require("assets/images/red-monkey.png"), "defaultAnchor": CENTER_BOTTOMISH_ANCHOR},
+    {"file": require("assets/images/bomb1.png"), "defaultAnchor": CENTER_BOTTOMISH_ANCHOR},
 ]
 
 const loader = new Pixi.Loader()
@@ -64,34 +65,32 @@ function createPixiComponent(pixi, entity) {
             createPixiComponent(pixi, _entity)
         })
     } else {
-        if(entity.type == "Line") {
-            // Can we somehow represent this with
-            // something more efficient like a low
-            // level mesh??
-            const graphics = new Pixi.Graphics()
-            const a = entity.points[0]
-            const b = entity.points[1]
-            graphics.lineStyle(20, 0xf0ead6)
-            graphics.moveTo(a.x, a.y)
-            graphics.lineTo(b.x, b.y)
-            graphics.zIndex = 1000000
-            pixi.addChild(graphics)
-            return
-        }
-        if(entity.type == "Text") {
-            const text = new Pixi.Text(entity.text, {"fontFamily": "Arial", "fontSize": 48, "fill": 0x000000})
-            text.anchor.x = 0.5
-            text.anchor.y = 0.5
-            text.position.x = entity.position.x
-            text.position.y = entity.position.y
-            text.position.z = entity.position.z
-            text.zIndex = 1000000
-            pixi.addChild(text)
-            return
-        }
-        // console.log(entity.position)
+        // if(entity.type == "Line") {
+        //     // Can we somehow represent this with
+        //     // something more efficient like a low
+        //     // level mesh??
+        //     const graphics = new Pixi.Graphics()
+        //     const a = entity.points[0]
+        //     const b = entity.points[1]
+        //     graphics.lineStyle(20, 0xf0ead6)
+        //     graphics.moveTo(a.x, a.y)
+        //     graphics.lineTo(b.x, b.y)
+        //     graphics.zIndex = 1000000
+        //     pixi.addChild(graphics)
+        //     return
+        // }
+        // if(entity.type == "Text") {
+        //     const text = new Pixi.Text(entity.text, {"fontFamily": "Arial", "fontSize": 48, "fill": 0x000000})
+        //     text.anchor.x = 0.5
+        //     text.anchor.y = 0.5
+        //     text.position.x = entity.position.x
+        //     text.position.y = entity.position.y
+        //     text.position.z = entity.position.z
+        //     text.zIndex = 1000000
+        //     pixi.addChild(text)
+        //     return
+        // }
         if(loader.resources[entity.image] == undefined) {
-            // console.warn("Could not find image resource in the loader:", entity.image)
             console.log("Could not find image resource in loader.")
             return
         }
