@@ -221,6 +221,10 @@ class Step {
                                 delete Index.entities[currentFrame.key]
                             }
 
+                            if(currentFrame.zoom != undefined) {
+                                entity.zoom = currentFrame.zoom
+                            }
+
                             if(currentFrame.radius != undefined) {
                                 entity.radius = currentFrame.radius
                             }
@@ -252,6 +256,10 @@ class Step {
                                     "x": tween(currentFrame.scale.x, nextFrame.scale.x, timing(progress)),
                                     "y": tween(currentFrame.scale.y, nextFrame.scale.y, timing(progress)),
                                 }
+                            }
+
+                            if(currentFrame.zoom != undefined && nextFrame.zoom != undefined) {
+                                entity.zoom = tween(currentFrame.zoom, nextFrame.zoom, timing(progress))
                             }
 
                             if(currentFrame.nudge != undefined && nextFrame.nudge != undefined) {
@@ -481,6 +489,17 @@ Animations["explosion"] = (step) => {
             }
         })
     })
+    keyframes.push({
+        "mark": 0,
+        "key": "camera",
+        "zoom": 5,
+    })
+    keyframes.push({
+        "mark": 9000,
+        "key": "camera",
+        "zoom": 1,
+        // "timing": Timings.easeOut,
+    })
     // keyframes.push({
     //     "mark": 0,
     //     "key": "camera",
@@ -491,21 +510,21 @@ Animations["explosion"] = (step) => {
     //     "key": "camera",
     //     "color": 0x000000,
     // })
-    for(var i = 0; i < SCREEN_SHAKE_COUNT; i += 1) {
-        keyframes.push({
-            "mark": i * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
-            "key": "camera",
-            "nudge": {
-                "x": Math.round(Random.range(2, 2)) * Random.sign(),
-                "y": Math.round(Random.range(2, 2)) * Random.sign(),
-            }
-        })
-    }
-    keyframes.push({
-        "mark": (i + 1) * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
-        "key": "camera",
-        "nudge": {"x": 0, "y": 0},
-    })
+    // for(var i = 0; i < SCREEN_SHAKE_COUNT; i += 1) {
+    //     keyframes.push({
+    //         "mark": i * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
+    //         "key": "camera",
+    //         "nudge": {
+    //             "x": Math.round(Random.range(2, 2)) * Random.sign(),
+    //             "y": Math.round(Random.range(2, 2)) * Random.sign(),
+    //         }
+    //     })
+    // }
+    // keyframes.push({
+    //     "mark": (i + 1) * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
+    //     "key": "camera",
+    //     "nudge": {"x": 0, "y": 0},
+    // })
     return {keyframes}
 }
 
