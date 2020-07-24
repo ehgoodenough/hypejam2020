@@ -489,17 +489,18 @@ Animations["explosion"] = (step) => {
             }
         })
     })
-    keyframes.push({
-        "mark": 0,
-        "key": "camera",
-        "zoom": 5,
-    })
-    keyframes.push({
-        "mark": 9000,
-        "key": "camera",
-        "zoom": 1,
-        // "timing": Timings.easeOut,
-    })
+    // keyframes.push({
+    //     "mark": 0,
+    //     "key": "camera",
+    //     "zoom": 5,
+    // })
+    // keyframes.push({
+    //     "mark": 9000,
+    //     "key": "camera",
+    //     "zoom": 1,
+    //     // "timing": Timings.easeOut,
+    // })
+
     // keyframes.push({
     //     "mark": 0,
     //     "key": "camera",
@@ -510,6 +511,7 @@ Animations["explosion"] = (step) => {
     //     "key": "camera",
     //     "color": 0x000000,
     // })
+
     // for(var i = 0; i < SCREEN_SHAKE_COUNT; i += 1) {
     //     keyframes.push({
     //         "mark": i * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,

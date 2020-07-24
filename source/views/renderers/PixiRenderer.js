@@ -17,10 +17,9 @@ const frame = {
 const app = new Pixi.Application({
     "width": frame.width,
     "height": frame.height,
-    "transparent": true,
+    // "transparent": true,
+    "backgroundColor": 0xf8d870,
 })
-
-window.app = app
 
 ////////////////
 // RENDERING //
@@ -102,7 +101,7 @@ function createPixiComponent(pixi, entity) {
         if(entity.position != undefined) {
             sprite.position.x = entity.position.x
             sprite.position.y = entity.position.y
-            sprite.zIndex = entity.position.stack
+            sprite.zIndex = entity.position.stack || entity.position.y
         }
         // THIS IS A VERY SPECIFIC ATTRIBUTE
         if(entity.nudge != undefined) {
@@ -157,13 +156,10 @@ function createPixiComponent(pixi, entity) {
 export default class PixiRenderer {
     render() {
         if(Loader.isDone != true) {
-            return (
-                <div class="PixiRenderer" id="pixi">
-                    <div class="Progress">
-                        {Math.round(Loader.progress) + "%"}
-                    </div>
-                </div>
-            )
+            return [
+                <div class="PixiRenderer" id="pixi"/>,
+                <div class="Progress">{Math.round(Loader.progress) + "%"}</div>
+            ]
         }
         let camerastyle = {}
         app.stage = createPixi(this.props.views)
@@ -182,7 +178,7 @@ export default class PixiRenderer {
         }
         return [
             <div class="PixiRenderer" id="pixi" style={camerastyle}/>,
-            <div class="Flash" style={{"backgroundColor": this.props.camera && this.props.camera.color}}/>
+            // <div class="Flash" style={{"backgroundColor": this.props.camera && this.props.camera.color}}/>
         ]
     }
     componentDidMount() {
