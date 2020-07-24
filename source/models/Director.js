@@ -67,6 +67,12 @@ export default new class Director {
     get isPerforming() {
         return this.steps.length > 0
     }
+    dump() {
+        while(this.steps.length > 0) {
+            this.steps.finish()
+            this.steps.shift()
+        }
+    }
 }
 
 ////////////
@@ -307,22 +313,12 @@ class Step {
 
 const Steps = {}
 
-Steps["explode"] = class extends Step {
+Steps["trailer"] = class extends Step {
     constructor(step) {
         super(step)
 
         this.sequence = Step.generateAnimatedSequence({
-            "animation": Animations["explode"](step),
-        })
-    }
-}
-
-Steps["explosion"] = class extends Step {
-    constructor(step) {
-        super(step)
-
-        this.sequence = Step.generateAnimatedSequence({
-            "animation": Animations["explosion"](step),
+            "animation": Animations["trailer"](step),
         })
     }
 }
@@ -473,38 +469,13 @@ const SMOKE_COUNT = 3 // per tile
 const SMOKE_NUDGE = 4 // in pixels
 const SCREEN_SHAKE_COUNT = 8
 const SCREEN_SHAKE_TIME = 5
-Animations["explosion"] = (step) => {
-    const keyframes = []
-    step.explosions.forEach((explosion, counter) => {
-        explosion.positions.forEach((position) => {
-            for(let i = 0; i < SMOKE_COUNT; i += 1) {
-                const key = "explosion:" + shortid.generate()
-                keyframes.push({
-                    "key": key,
-                    "mark": (counter * 100) + (Math.random() * 100),
-                    "position": {
-                        "x": position.x,
-                        "y": position.y,
-                        "stack": 2,
-                    },
-                    "nudge": {
-                        "x": Math.round(Random.range(2, 6)) * Random.sign(),
-                        "y": Math.round(Random.range(2, 6)) * Random.sign(),
-                    },
-                    "radius": 12,
-                    "color": 0xfeeae0,
-                    // "image": require("assets/images/explosion.flash.png"),
-                })
-                keyframes.push({
-                    "key": key,
-                    "mark": (counter * 100) + 500,
-                    "timing": Timings.easeOut,
-                    "radius": 0,
-                    "color": 0x543935,
-                    "toBeDeleted": true,
-                })
-            }
-        })
+Animations["trailer"] = (step) => {
+    let keyframes = []
+
+    step.substeps.forEach((substep) => {
+        if(substep.type == "explosion") {
+            keyframes = keyframes.concat(Animations["explosion"](substep))
+        }
     })
     // keyframes.push({
     //     "mark": 0,
@@ -545,6 +516,42 @@ Animations["explosion"] = (step) => {
     //     "nudge": {"x": 0, "y": 0},
     // })
     return {keyframes}
+}
+
+Animations["explosion"] = function(step) {
+    const keyframes = []
+    step.positions.forEach((positions, counter) => {
+        positions.forEach((position) => {
+            for(let i = 0; i < SMOKE_COUNT; i += 1) {
+                const key = "explosion:" + shortid.generate()
+                keyframes.push({
+                    "key": key,
+                    "mark": step.mark + (counter * 100) + (Math.random() * 100),
+                    "position": {
+                        "x": position.x,
+                        "y": position.y,
+                        "stack": 2,
+                    },
+                    "nudge": {
+                        "x": Math.round(Random.range(2, 6)) * Random.sign(),
+                        "y": Math.round(Random.range(2, 6)) * Random.sign(),
+                    },
+                    "radius": 12,
+                    "color": 0xfeeae0,
+                    // "image": require("assets/images/explosion.flash.png"),
+                })
+                keyframes.push({
+                    "key": key,
+                    "mark": step.mark + (counter * 100) + 500,
+                    "timing": Timings.easeOut,
+                    "radius": 0,
+                    "color": 0x543935,
+                    "toBeDeleted": true,
+                })
+            }
+        })
+    })
+    return keyframes
 }
 
 class Random {

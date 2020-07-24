@@ -6,28 +6,9 @@ import Geometry from "models/utility/Geometry.js"
 import Directions from "models/utility/Directions.js"
 import frame from "data/frame.js"
 
-const TILE = 24
-const CENTER_POSITION = {
-    "x": 0, // (frame.width * frame.resolution) / 2,
-    "y": 0, // (frame.height * frame.resolution) / 2,
-}
-const generateExplosions = () => [
-    {"positions": [
-        CENTER_POSITION
-    ]},
-    {"positions": [
-        Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.north, TILE)),
-        Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.south, TILE)),
-        Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.east, TILE)),
-        Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.west, TILE)),
-    ]},
-    {"positions": [
-        Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.north, TILE * 2)),
-        Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.south, TILE * 2)),
-        Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.east, TILE * 2)),
-        Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.west,TILE * 2)),
-    ]},
-]
+const TILE = 16
+const CENTER_POSITION = {"x": 0, "y": 0}
+const OTHER_POSITION = {"x": TILE * 5, "y": TILE * 2}
 
 export default class Index {
     constructor() {
@@ -61,23 +42,63 @@ export default class Index {
             }
         }
 
-        // Director.add({
-        //     "type": "explode",
-        //     "key": "bomb:0",
-        // })
-        Director.add({
-            "type": "explosion",
-            "explosions": generateExplosions(),
-        })
+        this.play()
     }
     update(delta) {
         if(Keyb.wasJustPressed("<space>", delta.ms)) {
-            Director.add({
-                "type": "explosion",
-                "explosions": generateExplosions(),
-            })
+            // Director.flush()
+            this.play()
         }
 
         Director.update(delta)
+    }
+    play() {
+        Director.add({
+            "type": "trailer",
+            "substeps": [
+                {
+                    "mark": 1000,
+                    "type": "explosion",
+                    "positions": [
+                        [
+                            CENTER_POSITION
+                        ],
+                        [
+                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.north, TILE)),
+                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.south, TILE)),
+                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.east, TILE)),
+                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.west, TILE)),
+                        ],
+                        [
+                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.north, TILE * 2)),
+                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.south, TILE * 2)),
+                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.east, TILE * 2)),
+                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.west,TILE * 2)),
+                        ],
+                    ]
+                },
+                {
+                    "mark": 2000,
+                    "type": "explosion",
+                    "positions": [
+                        [
+                            OTHER_POSITION
+                        ],
+                        [
+                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.north, TILE)),
+                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.south, TILE)),
+                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.east, TILE)),
+                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.west, TILE)),
+                        ],
+                        [
+                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.north, TILE * 2)),
+                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.south, TILE * 2)),
+                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.east, TILE * 2)),
+                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.west,TILE * 2)),
+                        ],
+                    ]
+                }
+            ],
+        })
     }
 }
