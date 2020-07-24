@@ -154,6 +154,113 @@ class Step {
         //     timeline.sort()
         // })
 
+        function setFrame(currentFrame) {
+            let entity = Index.entities[currentFrame.key]
+            if(entity == undefined) {
+                Index.entities[currentFrame.key] = entity = {
+                    "key": currentFrame.key
+                }
+            }
+
+            if(currentFrame.position != undefined) {
+                entity.position = {
+                    "x": currentFrame.position.x,
+                    "y": currentFrame.position.y,
+                    "stack": currentFrame.position.stack,
+                }
+            }
+
+            if(currentFrame.scale != undefined) {
+                entity.scale = {
+                    "x": currentFrame.scale.x,
+                    "y": currentFrame.scale.y,
+                }
+            }
+
+            if(currentFrame.nudge != undefined) {
+                entity.nudge = {
+                    "x": currentFrame.nudge.x,
+                    "y": currentFrame.nudge.y,
+                }
+            }
+
+            if(currentFrame.whiteout != undefined) {
+                entity.whiteout = currentFrame.whiteout
+            }
+
+            if(currentFrame.image != undefined) {
+                entity.image = currentFrame.image
+            }
+
+            if(currentFrame.toBeDeleted == true) {
+                delete Index.entities[currentFrame.key]
+            }
+
+            if(currentFrame.zoom != undefined) {
+                entity.zoom = currentFrame.zoom
+            }
+
+            if(currentFrame.radius != undefined) {
+                entity.radius = currentFrame.radius
+            }
+            if(currentFrame.color != undefined) {
+                entity.color = currentFrame.color
+            }
+            if(currentFrame.flash != undefined) {
+                entity.flash = currentFrame.flash
+            }
+        }
+
+        function calculateFrame(currentFrame, tweenFrame, nextFrame) {
+            let entity = Index.entities[currentFrame.key]
+            if(entity == undefined) {
+                Index.entities[currentFrame.key] = entity = {
+                    "key": currentFrame.key
+                }
+            }
+
+            const progress = Math.max(0, Math.min(1, (tweenFrame.mark - currentFrame.mark) / (nextFrame.mark - currentFrame.mark)))
+            const timing = nextFrame.timing || Timings.linear // TODO: Let each attribute set a separate timing function
+
+            if(currentFrame.position != undefined && nextFrame.position != undefined) {
+                entity.position = {
+                    "x": tween(currentFrame.position.x, nextFrame.position.x, timing(progress)),
+                    "y": tween(currentFrame.position.y, nextFrame.position.y, timing(progress)),
+                    "stack": tween(currentFrame.position.stack, nextFrame.position.stack, timing(progress)),
+                }
+            }
+
+            if(currentFrame.scale != undefined && nextFrame.scale != undefined) {
+                entity.scale = {
+                    "x": tween(currentFrame.scale.x, nextFrame.scale.x, timing(progress)),
+                    "y": tween(currentFrame.scale.y, nextFrame.scale.y, timing(progress)),
+                }
+            }
+
+            if(currentFrame.zoom != undefined && nextFrame.zoom != undefined) {
+                entity.zoom = tween(currentFrame.zoom, nextFrame.zoom, timing(progress))
+            }
+
+            if(currentFrame.nudge != undefined && nextFrame.nudge != undefined) {
+                entity.nudge = {
+                    "x": tween(currentFrame.nudge.x, nextFrame.nudge.x, timing(progress)),
+                    "y": tween(currentFrame.nudge.y, nextFrame.nudge.y, timing(progress)),
+                }
+            }
+
+            if(currentFrame.whiteout != undefined && nextFrame.whiteout != undefined) {
+                entity.whiteout = tween(currentFrame.whiteout, nextFrame.whiteout, timing(progress))
+            }
+
+            if(currentFrame.radius != undefined && nextFrame.radius != undefined) {
+                entity.radius = tween(currentFrame.radius, nextFrame.radius, timing(progress))
+            }
+
+            if(currentFrame.color != undefined && nextFrame.color != undefined) {
+                entity.color = colortween(currentFrame.color, nextFrame.color, timing(progress))
+            }
+        }
+
         return [
             {
                 "duration": maxmark,
@@ -164,14 +271,13 @@ class Step {
                         Keyset.forEach(animation.timelines, (timeline) => {
                             if(timeline[1] != undefined
                             && timeline[1].mark < tweenFrame.mark) {
+                                // setFrame(timeline[0])
                                 return timeline.shift()
                             }
                             if(timeline[0] != undefined
                             && timeline[0].mark > tweenFrame.mark) {
                                 return
                             }
-
-                            const currentFrame = timeline[0]
 
                             // // TODO: Only trigger these once.
                             // if(events[currentKeyframe.event] instanceof Function) {
@@ -181,105 +287,16 @@ class Step {
                             //     Audiomix.trigger(currentKeyframe.audio))
                             // }
 
-                            let entity = Index.entities[currentFrame.key]
-                            if(entity == undefined) {
-                                Index.entities[currentFrame.key] = entity = {
-                                    "key": currentFrame.key
-                                }
-                            }
-                            if(currentFrame.position != undefined) {
-                                entity.position = {
-                                    "x": currentFrame.position.x,
-                                    "y": currentFrame.position.y,
-                                    "stack": currentFrame.position.stack,
-                                }
-                            }
+                            const currentFrame = timeline[0]
 
-                            if(currentFrame.scale != undefined) {
-                                entity.scale = {
-                                    "x": currentFrame.scale.x,
-                                    "y": currentFrame.scale.y,
-                                }
-                            }
+                            setFrame(currentFrame)
 
-                            if(currentFrame.nudge != undefined) {
-                                entity.nudge = {
-                                    "x": currentFrame.nudge.x,
-                                    "y": currentFrame.nudge.y,
-                                }
-                            }
-
-                            if(currentFrame.whiteout != undefined) {
-                                entity.whiteout = currentFrame.whiteout
-                            }
-
-                            if(currentFrame.image != undefined) {
-                                entity.image = currentFrame.image
-                            }
-
-                            if(currentFrame.toBeDeleted == true) {
-                                delete Index.entities[currentFrame.key]
-                            }
-
-                            if(currentFrame.zoom != undefined) {
-                                entity.zoom = currentFrame.zoom
-                            }
-
-                            if(currentFrame.radius != undefined) {
-                                entity.radius = currentFrame.radius
-                            }
-                            if(currentFrame.color != undefined) {
-                                entity.color = currentFrame.color
-                            }
-                            if(currentFrame.flash != undefined) {
-                                entity.flash = currentFrame.flash
-                            }
-
-                            if(timeline[1] == undefined) {
+                            const nextFrame = timeline[1]
+                            if(nextFrame == undefined) {
                                 return
                             }
-                            const nextFrame = timeline[1]
 
-                            const progress = Math.max(0, Math.min(1, (tweenFrame.mark - currentFrame.mark) / (nextFrame.mark - currentFrame.mark)))
-                            const timing = nextFrame.timing || Timings.linear // TODO: Let each attribute set a separate timing function
-
-                            if(currentFrame.position != undefined && nextFrame.position != undefined) {
-                                entity.position = {
-                                    "x": tween(currentFrame.position.x, nextFrame.position.x, timing(progress)),
-                                    "y": tween(currentFrame.position.y, nextFrame.position.y, timing(progress)),
-                                    "stack": tween(currentFrame.position.stack, nextFrame.position.stack, timing(progress)),
-                                }
-                            }
-
-                            if(currentFrame.scale != undefined && nextFrame.scale != undefined) {
-                                entity.scale = {
-                                    "x": tween(currentFrame.scale.x, nextFrame.scale.x, timing(progress)),
-                                    "y": tween(currentFrame.scale.y, nextFrame.scale.y, timing(progress)),
-                                }
-                            }
-
-                            if(currentFrame.zoom != undefined && nextFrame.zoom != undefined) {
-                                entity.zoom = tween(currentFrame.zoom, nextFrame.zoom, timing(progress))
-                            }
-
-                            if(currentFrame.nudge != undefined && nextFrame.nudge != undefined) {
-                                entity.nudge = {
-                                    "x": tween(currentFrame.nudge.x, nextFrame.nudge.x, timing(progress)),
-                                    "y": tween(currentFrame.nudge.y, nextFrame.nudge.y, timing(progress)),
-                                }
-                            }
-
-                            if(currentFrame.whiteout != undefined && nextFrame.whiteout != undefined) {
-                                entity.whiteout = tween(currentFrame.whiteout, nextFrame.whiteout, timing(progress))
-                            }
-
-                            if(currentFrame.radius != undefined && nextFrame.radius != undefined) {
-                                entity.radius = tween(currentFrame.radius, nextFrame.radius, timing(progress))
-                            }
-
-                            if(currentFrame.color != undefined && nextFrame.color != undefined) {
-                                entity.color = colortween(currentFrame.color, nextFrame.color, timing(progress))
-                            }
+                            calculateFrame(currentFrame, tweenFrame, nextFrame)
                         })
                     }
                 }
