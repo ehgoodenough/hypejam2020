@@ -73,35 +73,44 @@ function createPixiComponent(pixi, entity) {
         if(entity.type == "camera") {
             return
         }
-        let sprite = undefined
         if(entity.radius != undefined) {
             const graphics = new Pixi.Graphics()
+            // const graphics2 = new Pixi.Graphics()
             graphics.beginFill(entity.color)
+            // graphics2.beginFill(entity.color)
             graphics.lineStyle(0)
-            // let x = entity.position.x
-            // let y = entity.position.y
-            // if(entity.nudge != undefined) {
-            //     x += entity.nudge.x || 0
-            //     y += entity.nudge.y || 0
-            // }
-            graphics.drawCircle(0, 0, entity.radius)
-            graphics.endFill()
-            graphics.zIndex = 1000000
-            // pixi.addChild(graphics)
-            // return
-            sprite = graphics
-        } else {
-            if(Loader.resources[entity.image] == undefined) {
-                console.log("Could not find image resource in loader.")
-                return
+            // graphics2.lineStyle(1, 0x543935)
+            // graphics2.lineStyle(1, 0xfeeae0)
+            let x = entity.position.x
+            let y = entity.position.y
+            if(entity.nudge != undefined) {
+                x += entity.nudge.x || 0
+                y += entity.nudge.y || 0
             }
-            sprite = new Pixi.Sprite(Loader.resources[entity.image].texture)
+            graphics.drawCircle(0, 0, entity.radius)
+            // graphics2.drawCircle(0, 0, entity.radius+1)
+            graphics.endFill()
+            // graphics2.endFill()
+            graphics.position.x = x
+            graphics.position.y = y
+            graphics.zIndex = (entity.position.y * 10)
+            // graphics2.position.x = x
+            // graphics2.position.y = y
+            // graphics2.zIndex = (entity.position.y * 10) - 1
+            pixi.addChild(graphics)
+            // pixi.addChild(graphics2)
+            return
         }
+        if(Loader.resources[entity.image] == undefined) {
+            console.log("Could not find image resource in loader.")
+            return
+        }
+        let sprite = new Pixi.Sprite(Loader.resources[entity.image].texture)
 
         if(entity.position != undefined) {
             sprite.position.x = entity.position.x
             sprite.position.y = entity.position.y
-            sprite.zIndex = entity.position.stack || entity.position.y
+            sprite.zIndex = (entity.position.y * 10)
         }
         // THIS IS A VERY SPECIFIC ATTRIBUTE
         if(entity.nudge != undefined) {
