@@ -7,8 +7,8 @@ import frame from "data/frame.js"
 
 const TILE = frame.resolution
 const CENTER_POSITION = {
-    "x": (frame.width * frame.resolution) / 2,
-    "y": (frame.height * frame.resolution) / 2,
+    "x": 0, // (frame.width * frame.resolution) / 2,
+    "y": 0, // (frame.height * frame.resolution) / 2,
 }
 const generateExplosions = () => [
     {"positions": [
@@ -33,13 +33,14 @@ export default class Index {
         this.entities = {
             "bomb:0": {
                 "type": "bomb",
-                "position": {"x": 24, "y": 24},
+                "position": {"x": 0, "y": 0},
                 "image": require("assets/images/bomb1.png"),
             },
             "camera": {
                 "type": "camera",
                 "position": {"x": 0, "y": 0},
                 "nudge": {"x": 0, "y": 0},
+                "zoom": 1,
             }
         }
 

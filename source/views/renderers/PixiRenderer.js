@@ -9,13 +9,18 @@ Pixi.utils.skipHello()
 Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST
 // renderer.roundPixels = true
 
-const frame = {"width": 16, "height": 9, "resolution": 24}
+const frame = {
+    "width": 16 * 24*3,
+    "height": 9 * 24*3,
+}
 
 const app = new Pixi.Application({
-    "width": frame.width * frame.resolution,
-    "height": frame.height * frame.resolution,
+    "width": frame.width,
+    "height": frame.height,
     "transparent": true,
 })
+
+window.app = app
 
 ////////////////
 // RENDERING //
@@ -160,21 +165,23 @@ export default class PixiRenderer {
                 </div>
             )
         }
+        let camerastyle = {}
         app.stage = createPixi(this.props.views)
         if(this.props.camera != undefined) {
             if(this.props.camera.position != undefined) {
-                app.stage.position.x = this.props.camera.position.x
-                app.stage.position.y = this.props.camera.position.y
+                app.stage.position.x = this.props.camera.position.x - (app.renderer.width / 2)
+                app.stage.position.y = this.props.camera.position.y - (app.renderer.height / 2)
                 if(this.props.camera.nudge != undefined) {
                     app.stage.position.x += this.props.camera.nudge.x || 0
                     app.stage.position.y += this.props.camera.nudge.y || 0
                 }
+                camerastyle.transform = "scale(" + this.props.camera.zoom + ")"
                 app.stage.position.x *= -1
                 app.stage.position.y *= -1
             }
         }
         return [
-            <div class="PixiRenderer" id="pixi"/>,
+            <div class="PixiRenderer" id="pixi" style={camerastyle}/>,
             <div class="Flash" style={{"backgroundColor": this.props.camera && this.props.camera.color}}/>
         ]
     }
