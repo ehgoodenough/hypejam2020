@@ -15,9 +15,11 @@ class Player {
         this.type = "player"
         this.velocity = {"x": 0, "y": 0}
         this.position = new Point({"x": 100, "y": 100})
-        this.image = require("assets/images/red-monkey.png")
+        this.image = require("assets/images/gooball.png")
 
         this.speed = TILE * 8
+
+        this.deceleration = 0.05
     }
     update(delta) {
         if(Keyb.isPressed("<left>")) {
@@ -47,10 +49,10 @@ class Player {
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
-        this.velocity.x = 0
-        this.velocity.y = 0
-
-        // BOMBS //
+        this.velocity.x *= this.deceleration
+        this.velocity.y *= this.deceleration
+        this.velocity.x = this.velocity.x < 0.0001 && this.velocity.x > -0.0001 ? 0 : this.velocity.x
+        this.velocity.y = this.velocity.y < 0.0001 && this.velocity.y > -0.0001 ? 0 : this.velocity.y
 
         const position = new Point(this.position, {"tiled": true})
         if(Keyb.wasJustPressed("<space>", delta.ms)
@@ -95,7 +97,7 @@ class Bomb {
         this.type = "bomb"
         this.position = position
         this.key = this.position.key
-        this.image = require("assets/images/bomb1.png")
+        this.image = require("assets/images/bomb.png")
 
         this.time = 0
     }
@@ -149,7 +151,7 @@ export default class Index {
                 const block = {
                     "type": "block",
                     "position": {"x": x * 16, "y": y * 16},
-                    "image": require("assets/images/wall.png"),
+                    "image": require("assets/images/bad-wall.png"),
                 }
                 block.key = Point.key({
                     "x": block.position.x / TILE,
@@ -163,9 +165,11 @@ export default class Index {
             }
         }
 
-        this.play()
+        // this.play()
     }
     update(delta) {
+        // delta.s /= 8
+        // delta.ms /= 8
         // if(Keyb.wasJustPressed("<space>", delta.ms)) {
         //     // Director.flush()
         //     this.play()

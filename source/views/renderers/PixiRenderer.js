@@ -18,7 +18,8 @@ const app = new Pixi.Application({
     "width": frame.width,
     "height": frame.height,
     // "transparent": true,
-    "backgroundColor": 0xf8d870,
+    // "backgroundColor": 0xf7c881, // true color
+    "backgroundColor": 0xEEEEEE,
 })
 
 ////////////////
@@ -87,6 +88,7 @@ function createPixiComponent(pixi, entity) {
                 x += entity.nudge.x || 0
                 y += entity.nudge.y || 0
             }
+            y -= 0.5 * 16
             graphics.drawCircle(0, 0, entity.radius)
             // graphics2.drawCircle(0, 0, entity.radius+1)
             graphics.endFill()
