@@ -1,0 +1,102 @@
+{
+  "imagename": "bomber",
+  "imagecolor": "red",
+  "position": {
+    "x": -64,
+    "y": -112
+  },
+  "input": {
+    "events": [
+      {
+        "key": "<down>",
+        "pressed": true,
+        "time": 823.2449999195524
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 2529.104999965057
+      },
+      {
+        "key": "<down>",
+        "pressed": false,
+        "time": 2566.3499999209307
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 3032.7999998698942
+      },
+      {
+        "key": "<up>",
+        "pressed": true,
+        "time": 3247.2499999566935
+      },
+      {
+        "key": "<up>",
+        "pressed": false,
+        "time": 4897.404999821447
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 4937.709999852814
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 5110.329999879468
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 5342.709999822546
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 5432.719999749679
+      },
+      {
+        "key": "<down>",
+        "pressed": true,
+        "time": 5452.519999758806
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 7141.374999948312
+      },
+      {
+        "key": "<down>",
+        "pressed": false,
+        "time": 7158.579999930225
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 7705.879999848548
+      },
+      {
+        "key": "<up>",
+        "pressed": true,
+        "time": 7844.194999954198
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 8058.205000124872
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 8117.620000091847
+      },
+      {
+        "key": "<up>",
+        "pressed": false,
+        "time": 9962.800000212155
+      }
+    ]
+  }
+}

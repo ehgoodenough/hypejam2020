@@ -3,6 +3,6 @@ export default class Camera {
         this.key = "camera"
         this.type = "camera"
         this.position = {"x": 0, "y": 0}
-        this.zoom = 3
+        this.zoom = 1
     }
 }

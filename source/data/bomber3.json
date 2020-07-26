@@ -1,39 +1,71 @@
 {
+  "imagename": "bomber",
+  "imagecolor": "green",
   "position": {
-    "x": 16,
-    "y": 64
+    "x": 112,
+    "y": -64
   },
   "input": {
     "events": [
       {
-        "key": "<right>",
+        "key": "<left>",
         "pressed": true,
-        "time": 1803.3800002303906
+        "time": 1125.7650001789443
       },
       {
         "key": "<down>",
         "pressed": true,
-        "time": 2383.680000260938
-      },
-      {
-        "key": "<right>",
-        "pressed": false,
-        "time": 2459.5700002391823
+        "time": 2869.795000005979
       },
       {
         "key": "<left>",
-        "pressed": true,
-        "time": 2752.8650002204813
+        "pressed": false,
+        "time": 2907.205000054091
       },
       {
         "key": "<down>",
         "pressed": false,
-        "time": 2772.5000001955777
+        "time": 3607.57500003092
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 3627.955000032671
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 5704.800000006799
+      },
+      {
+        "key": "<down>",
+        "pressed": true,
+        "time": 6112.544999981765
+      },
+      {
+        "key": "<down>",
+        "pressed": false,
+        "time": 6337.179999914952
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 6376.209999958519
       },
       {
         "key": "<left>",
         "pressed": false,
-        "time": 4301.060000201687
+        "time": 8626.165000256151
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 8759.735000319779
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 8991.365000372753
       }
     ]
   }

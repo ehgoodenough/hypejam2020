@@ -13,11 +13,15 @@ export default class Index {
         // this.entities.add(new Bomber(require("data/bomber1.json")))
         // this.entities.add(new Bomber(require("data/bomber2.json")))
         // this.entities.add(new Bomber(require("data/bomber3.json")))
+        // this.entities.add(new Bomber(require("data/bomber4.json")))
+        // this.entities.add(new Bomber(require("data/bomber5.json")))
+        // this.entities.add(new Bomber(require("data/bomber6.json")))
+        // this.entities.add(new Bomber(require("data/bomber7.json")))
 
         this.entities.add(new Bomber({
-            "position": {"tx": 0, "ty": 4},
+            "position": {"tx": 0, "ty": 0},
             "imagename": "bomber",
-            "imagecolor": "red"
+            "imagecolor": "yellow"
         }))
 
         const height = 5// 20

@@ -1,39 +1,81 @@
 {
+  "imagename": "bomber",
+  "imagecolor": "blue",
   "position": {
-    "x": 16,
-    "y": 32
+    "x": 112,
+    "y": 0
   },
   "input": {
     "events": [
       {
-        "key": "<right>",
-        "pressed": true,
-        "time": 1616.86499993084
-      },
-      {
-        "key": "<right>",
-        "pressed": false,
-        "time": 2269.4249999476597
-      },
-      {
-        "key": "<down>",
-        "pressed": true,
-        "time": 2269.4249999476597
-      },
-      {
-        "key": "<down>",
-        "pressed": false,
-        "time": 2817.985000088811
-      },
-      {
         "key": "<left>",
         "pressed": true,
-        "time": 2817.985000088811
+        "time": 1924.5550001505762
       },
       {
         "key": "<left>",
         "pressed": false,
-        "time": 3975.1950001809746
+        "time": 3610.0200000801124
+      },
+      {
+        "key": "<down>",
+        "pressed": true,
+        "time": 3610.0200000801124
+      },
+      {
+        "key": "<down>",
+        "pressed": false,
+        "time": 4155.460000038147
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 4169.6950000477955
+      },
+      {
+        "key": "<up>",
+        "pressed": true,
+        "time": 5816.260000108741
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 5834.345000097528
+      },
+      {
+        "key": "<up>",
+        "pressed": false,
+        "time": 6165.195000066888
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 6284.275000041816
+      },
+      {
+        "key": "<up>",
+        "pressed": true,
+        "time": 7880.339999799617
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 7919.724999810569
+      },
+      {
+        "key": "<up>",
+        "pressed": false,
+        "time": 8344.569999957457
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 8381.909999996424
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 10167.415000265464
       }
     ]
   }
