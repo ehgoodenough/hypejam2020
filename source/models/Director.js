@@ -39,30 +39,18 @@ export default new class Director {
     constructor() {
         this.steps = []
     }
-    add(steps) {
-        if(steps instanceof Array == false) {
-            steps = [steps]
+    add(step) {
+        if(Steps[step.type] != undefined) {
+            console.log("%cSupported Step:", "color:black;", step)
+            this.steps.push(new Steps[step.type](step))
+        } else {
+            console.log("%cUnsupported Step:", "color:red", step)
+            throw new Error()
         }
-        steps = steps.map((step) => {
-            if(Steps[step.type] != undefined) {
-                console.log("%cSupported Step:", "color:black;", step)
-                return new Steps[step.type](step)
-            } else {
-                console.log("%cUnsupported Step:", "color:red", step)
-                // return new GenericStep(step)
-                throw new Error()
-            }
-        })
-        this.steps = this.steps.concat(steps)
     }
     update(delta) {
-        if(this.steps[0] != undefined) {
-            this.steps[0].update(delta)
-
-            if(this.steps[0].hasFinished) {
-                this.steps.shift()
-            }
-        }
+        this.steps.forEach((step) => step.update(delta))
+        this.steps = this.steps.filter((step) => step.hasFinished != true)
     }
     get isPerforming() {
         return this.steps.length > 0

@@ -145,9 +145,7 @@ class Bomb {
             })
             positionset.push(positions)
         }
-
-        console.log(positionset)
-
+        
         Director.add({
             "mark": 0,
             "type": "explosion",
