@@ -60,14 +60,21 @@ class KeybRecorder extends Keyb {
         this.registerEventListeners()
 
         this.events = []
-        this.startTime = window.performance.now()
+        // this.startTime = window.performance.now()
+        this.time = 0
     }
     on(event) {
-        event.time -= this.startTime
+        // event.time -= this.startTime
+        event.time = this.time
         this.events.push(event)
     }
     export() {
         window.copy(this.events)
+    }
+    update(delta) {
+        this.time += delta.ms
+        // console.log(this.time)
+        // console.log(window.performance.now() - this.startTime)
     }
 }
 
@@ -76,17 +83,18 @@ class KeybReplay extends Keyb {
         super()
 
         this.events = events
+        // this.startTime = window.performance.now()
         this.time = 0
     }
     update(delta) {
         // this is going to be slightly out of sync but eh whatever
 
+        // const time = window.performance.now() - this.startTime
         this.time += delta.ms
-
-        // console.log(this.events[0].time, this.time)
+        const time = this.time
 
         while(this.events.length > 0
-        && this.time > this.events[0].time) {
+        && this.events[0].time < time) {
             if(this.events[0].pressed == true) {
                 this.setPressed(this.events[0].key)
             } else {
@@ -307,7 +315,7 @@ export default class Index {
         this.entities.add(new Player(require("data/player2.json")))
         this.entities.add(new Player(require("data/player3.json")))
 
-        this.entities.add(new Player({"position": {"tx": -2, "ty": 2}}))
+        // this.entities.add(new Player({"position": {"tx": 1, "ty": 4}}))
 
         const height = 5// 20
         const width = 5 // 36
