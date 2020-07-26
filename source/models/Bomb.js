@@ -38,7 +38,6 @@ export default class Bomb {
                     continue
                 }
                 if(collision.type == "boxblock") {
-                    // this.collection.remove(collision)
                     explosion.toDestroy = collision
                     explosion.isSnuffed = true
                 }
@@ -46,6 +45,12 @@ export default class Bomb {
                     // ALSO EXPLODE THIS BOMB!!
                 }
             }
+            Object.values(this.collection.values).forEach((entity) => {
+                if(entity.type == "bomber"
+                && entity.position.key == explosion.position.key) {
+                    explosion.toDestroy = entity
+                }
+            })
 
             superexplosions.push(explosion)
 
