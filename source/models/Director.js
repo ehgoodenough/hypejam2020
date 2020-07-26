@@ -186,7 +186,7 @@ class Step {
             }
 
             if(currentFrame.toBeDeleted == true) {
-                delete Index.entities.get(currentFrame.key)
+                Index.entities.remove({"key": currentFrame.key})
             }
 
             if(currentFrame.zoom != undefined) {
@@ -332,7 +332,7 @@ const Animations = {}
 const WAIT = 0.5
 const SHAKE_TIME = 0.05
 const SHAKE = 8
-Animations["explode"] = (step) => {
+Animations["bomb tick"] = (step) => {
     return {
         "duration": 10 * 1000, // TODO: DETECT THIS AUTOMATICALLY
         "keyframes": [
@@ -520,36 +520,46 @@ Animations["trailer"] = (step) => {
 
 Animations["explosion"] = function(step) {
     const keyframes = []
-    step.positions.forEach((positions, counter) => {
-        positions.forEach((position) => {
-            for(let i = 0; i < SMOKE_COUNT; i += 1) {
-                const key = "explosion:" + shortid.generate()
+    step.explosions.forEach((explosion) => {
+        for(let i = 0; i < SMOKE_COUNT; i += 1) {
+            const mark = step.mark + (explosion.submark * 100) + (Math.random() * 100)
+            const key = "explosion:" + shortid.generate()
+            if(explosion.toDestroy != undefined) {
                 keyframes.push({
-                    "key": key,
-                    "mark": step.mark + (counter * 100) + (Math.random() * 100),
-                    "position": {
-                        "x": position.x,
-                        "y": position.y,
-                        "stack": 2,
-                    },
-                    "nudge": {
-                        "x": Math.round(Random.range(2, 6)) * Random.sign(),
-                        "y": Math.round(Random.range(2, 6)) * Random.sign(),
-                    },
-                    "radius": 12,
-                    "color": 0xfeeae0,
-                    // "image": require("assets/images/explosion.flash.png"),
+                    "mark": 0,
+                    "key": explosion.toDestroy.key,
                 })
                 keyframes.push({
-                    "key": key,
-                    "mark": step.mark + (counter * 100) + 500,
-                    "timing": Timings.easeOut,
-                    "radius": 0,
-                    "color": 0x543935,
+                    "mark": mark,
+                    "key": explosion.toDestroy.key,
                     "toBeDeleted": true,
                 })
             }
-        })
+            keyframes.push({
+                "key": key,
+                "mark": mark,
+                "position": {
+                    "x": explosion.position.x,
+                    "y": explosion.position.y,
+                    "stack": 2,
+                },
+                "nudge": {
+                    "x": Math.round(Random.range(2, 6)) * Random.sign(),
+                    "y": Math.round(Random.range(2, 6)) * Random.sign(),
+                },
+                "radius": 12,
+                "color": 0xfeeae0,
+                // "image": require("assets/images/explosion.flash.png"),
+            })
+            keyframes.push({
+                "key": key,
+                "mark": step.mark + (explosion.submark * 100) + 500,
+                "timing": Timings.easeOut,
+                "radius": 0,
+                "color": 0x543935,
+                "toBeDeleted": true,
+            })
+        }
     })
     return {keyframes}
 }

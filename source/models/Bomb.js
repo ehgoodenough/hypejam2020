@@ -24,39 +24,49 @@ export default class Bomb {
         if(this.hasExploded == true) return
         this.hasExploded = true
 
-        // const positions = [this.position]
-        const positionset = [
-            [this.position]
-        ]
-        for(let distance = 1; distance < this.power; distance += 1) {
-            const positions = []
-            Object.values(Directions).forEach((direction) => {
-                const position = new Point({
-                    "tx": this.position.tx + (direction.x * distance),
-                    "ty": this.position.ty + (direction.y * distance),
-                })
-                const collision = this.collection.get(position)
-                if(collision != undefined) {
-                    console.log(collision)
-                    if(collision.type == "block") {
-                        return
-                    }
-                    if(collision.type == "boxblock") {
-                        this.collection.remove(collision) // REMOVE AS PART OF ANIMATION
-                    }
-                    if(collision.type == "bomb") {
-                        // ALSO EXPLODE THIS BOMB!!
-                    }
+        const explosions = [{"position": this.position, "power": this.power}]
+        const superexplosions = []
+        while(explosions.length > 0) {
+            const explosion = explosions.shift()
+            explosion.submark = explosion.submark || 0
+
+            const collision = this.collection.get(explosion.position)
+            if(collision != undefined) {
+                if(collision.type == "block") {
+                    continue
                 }
-                positions.push(position)
-            })
-            positionset.push(positions)
+                if(collision.type == "boxblock") {
+                    // this.collection.remove(collision)
+                    explosion.toDestroy = collision
+                    explosion.isSnuffed = true
+                }
+                if(collision.type == "bomb") {
+                    // ALSO EXPLODE THIS BOMB!!
+                }
+            }
+
+            superexplosions.push(explosion)
+
+            // Recurse!!
+            if(explosion.power > 0
+            && explosion.isSnuffed != true) {
+                Object.values(Directions).forEach((direction) => {
+                    explosions.push({
+                        "power": explosion.power - 1,
+                        "submark": explosion.submark + 1,
+                        "position": new Point({
+                            "tx": this.position.tx + direction.x,
+                            "ty": this.position.ty + direction.y,
+                        })
+                    })
+                })
+            }
         }
 
         Director.add({
             "mark": 0,
             "type": "explosion",
-            "positions": positionset
+            "explosions": superexplosions
         })
 
         this.collection.remove(this)
