@@ -1,0 +1,48 @@
+{
+    "position": {"x": 0, "y": 0},
+    "input": {
+        "type": "replay",
+        "events": [
+          {
+            "key": "<left>",
+            "pressed": true,
+            "time": 3637.2799999662675
+          },
+          {
+            "key": "<left>",
+            "pressed": false,
+            "time": 4578.125
+          },
+          {
+            "key": "<up>",
+            "pressed": true,
+            "time": 4786.919999984093
+          },
+          {
+            "key": "<up>",
+            "pressed": false,
+            "time": 5259.074999950826
+          },
+          {
+            "key": "<left>",
+            "pressed": true,
+            "time": 5314.5349999540485
+          },
+          {
+            "key": "<left>",
+            "pressed": false,
+            "time": 5645.399999979418
+          },
+          {
+            "key": "<down>",
+            "pressed": true,
+            "time": 5723.2099999673665
+          },
+          {
+            "key": "<down>",
+            "pressed": false,
+            "time": 6805.430000007618
+          }
+        ]
+    }
+}

@@ -1,4 +1,4 @@
-import Keyb from "keyb"
+
 import shortid from "shortid"
 
 import Director from "models/Director.js"
@@ -10,28 +10,125 @@ const TILE = 16
 const CENTER_POSITION = {"x": 0., "y": 0}
 const OTHER_POSITION = {"x": TILE * 5, "y": TILE * 2}
 
-class Player {
+import vkey from "vkey"
+// import Keyb from "keyb"
+class Keyb {
     constructor() {
+        this.data = {}
+    }
+    registerEventListeners() {
+        document.addEventListener("keydown", (event) => this.setPressed(event.keyCode))
+        document.addEventListener("keyup", (event) => this.setNotPressed(event.keyCode))
+    }
+    isPressed(key) {
+        return this.data[key] != undefined
+    }
+    wasJustPressed(key, delta) {
+        return window.performance.now() - this.data[key] < (delta || 1000 / 60)
+    }
+    isNotPressed(key) {
+        return this.data[key] == undefined
+    }
+    setPressed(keycode) {
+        const key = vkey[keycode] || keycode
+        if(this.isPressed(key) == false) {
+            this.data[key] = window.performance.now()
+            this.on({"key": key, "pressed": true, "time": window.performance.now()})
+        }
+    }
+    setNotPressed(keycode) {
+        const key = vkey[keycode] || keycode
+        if(this.isPressed(key) == true) {
+            this.on({"key": key, "pressed": false, "time": window.performance.now()})
+        }
+        delete this.data[key]
+    }
+    on(event) {}
+}
+
+class KeybStandard extends Keyb {
+    constructor() {
+        super()
+        this.registerEventListeners()
+    }
+}
+
+class KeybRecorder extends Keyb {
+    constructor() {
+        super()
+
+        this.registerEventListeners()
+
+        this.events = []
+        this.startTime = window.performance.now()
+    }
+    on(event) {
+        event.time -= this.startTime
+        this.events.push(event)
+    }
+    export() {
+        window.copy(this.events)
+    }
+}
+
+class KeybReplay extends Keyb {
+    constructor({events}) {
+        super()
+
+        this.events = events
+        this.time = 0
+    }
+    update(delta) {
+        // this is going to be slightly out of sync but eh whatever
+
+        this.time += delta.ms
+
+        // console.log(this.events[0].time, this.time)
+
+        while(this.events.length > 0
+        && this.time > this.events[0].time) {
+            if(this.events[0].pressed == true) {
+                this.setPressed(this.events[0].key)
+            } else {
+                this.setNotPressed(this.events[0].key)
+            }
+            this.events.shift()
+        }
+    }
+}
+
+class Player {
+    constructor({position, input}) {
         this.type = "player"
         this.velocity = {"x": 0, "y": 0}
-        this.position = new Point({"x": 100, "y": 100})
+        this.position = new Point(position)
+        this.startingPosition = new Point(position)
         this.image = require("assets/images/gooball.png")
 
         this.speed = TILE * 8
-
         this.deceleration = 0.05
+
+        if(input != undefined) {
+            this.input = new KeybReplay(input)
+        } else {
+            this.input = new KeybRecorder()
+            window.player = this
+        }
     }
     update(delta) {
-        if(Keyb.isPressed("<left>")) {
+        if(this.input.update instanceof Function) {
+            this.input.update(delta)
+        }
+        if(this.input.isPressed("<left>")) {
             this.velocity.x = -1 * this.speed * delta.s
         }
-        if(Keyb.isPressed("<right>")) {
+        if(this.input.isPressed("<right>")) {
             this.velocity.x = this.speed * delta.s
         }
-        if(Keyb.isPressed("<up>")) {
+        if(this.input.isPressed("<up>")) {
             this.velocity.y = -1 * this.speed * delta.s
         }
-        if(Keyb.isPressed("<down>")) {
+        if(this.input.isPressed("<down>")) {
             this.velocity.y = this.speed * delta.s
         }
 
@@ -55,10 +152,21 @@ class Player {
         this.velocity.y = this.velocity.y < 0.0001 && this.velocity.y > -0.0001 ? 0 : this.velocity.y
 
         const position = new Point(this.position).round()
-        if(Keyb.wasJustPressed("<space>", delta.ms)
+        if(this.input.wasJustPressed("<space>", delta.ms)
         && this.collection.has(position) == false) {
             this.collection.add(new Bomb({"position": position, "power": 3}))
         }
+    }
+    copy() {
+        window.copy({
+            "position": {
+                "x": this.startingPosition.x,
+                "y": this.startingPosition.y
+            },
+            "input": {
+                "events": this.input.events
+            }
+        })
     }
 }
 
@@ -145,7 +253,7 @@ class Bomb {
             })
             positionset.push(positions)
         }
-        
+
         Director.add({
             "mark": 0,
             "type": "explosion",
@@ -195,7 +303,11 @@ export default class Index {
             "zoom": 3,
         })
 
-        this.entities.add(new Player())
+        this.entities.add(new Player(require("data/player1.json")))
+        this.entities.add(new Player(require("data/player2.json")))
+        this.entities.add(new Player(require("data/player3.json")))
+
+        this.entities.add(new Player({"position": {"tx": -2, "ty": 2}}))
 
         const height = 5// 20
         const width = 5 // 36
@@ -223,10 +335,6 @@ export default class Index {
     update(delta) {
         // delta.s /= 8
         // delta.ms /= 8
-        // if(Keyb.wasJustPressed("<space>", delta.ms)) {
-        //     // Director.flush()
-        //     this.play()
-        // }
 
         this.entities.get().forEach((entity) => {
             if(entity.update instanceof Function) {
