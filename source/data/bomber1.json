@@ -1,111 +1,61 @@
 {
   "imagename": "bomber",
-  "imagecolor": "red",
+  "imagecolor": "yellow",
   "position": {
-    "x": -112,
-    "y": 64
+    "x": 0,
+    "y": 0
   },
   "input": {
     "events": [
       {
-        "key": "<right>",
-        "pressed": true,
-        "time": 1431.8950001033954
-      },
-      {
-        "key": "<right>",
-        "pressed": false,
-        "time": 3157.2550001437776
-      },
-      {
-        "key": "<up>",
-        "pressed": true,
-        "time": 3215.820000099484
-      },
-      {
-        "key": "<up>",
-        "pressed": false,
-        "time": 3644.1850002738647
-      },
-      {
-        "key": "<up>",
-        "pressed": true,
-        "time": 3740.885000268463
-      },
-      {
-        "key": "<up>",
-        "pressed": false,
-        "time": 3835.6400002958253
-      },
-      {
-        "key": "<down>",
-        "pressed": true,
-        "time": 4407.54500037292
-      },
-      {
-        "key": "<down>",
-        "pressed": false,
-        "time": 4466.845000337344
-      },
-      {
         "key": "<left>",
         "pressed": true,
-        "time": 4682.845000352245
+        "time": 419.8299998533912
       },
       {
         "key": "<left>",
         "pressed": false,
-        "time": 6374.990000389516
+        "time": 731.5549998311326
       },
       {
-        "key": "<up>",
+        "key": "<space>",
         "pressed": true,
-        "time": 6392.435000336263
+        "time": 866.744999832008
       },
       {
-        "key": "<up>",
+        "key": "<space>",
         "pressed": false,
-        "time": 6732.1850004955195
-      },
-      {
-        "key": "<up>",
-        "pressed": true,
-        "time": 6829.215000441764
-      },
-      {
-        "key": "<up>",
-        "pressed": false,
-        "time": 6981.275000376627
+        "time": 941.5199998766184
       },
       {
         "key": "<right>",
         "pressed": true,
-        "time": 7021.205000404734
-      },
-      {
-        "key": "<down>",
-        "pressed": true,
-        "time": 8755.654999869876
+        "time": 960.0399999180809
       },
       {
         "key": "<right>",
         "pressed": false,
-        "time": 8788.8199997833
+        "time": 1350.9099999791943
       },
       {
-        "key": "<down>",
+        "key": "<right>",
+        "pressed": true,
+        "time": 1771.4700000360608
+      },
+      {
+        "key": "<right>",
         "pressed": false,
-        "time": 9680.87999970885
+        "time": 1848.900000040885
       },
       {
         "key": "<left>",
         "pressed": true,
-        "time": 9954.74999974249
+        "time": 1887.7250000368804
       },
       {
         "key": "<left>",
         "pressed": false,
-        "time": 11800.020000489894
+        "time": 1934.5200000680052
       }
     ]
   }

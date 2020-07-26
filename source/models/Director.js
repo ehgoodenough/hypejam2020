@@ -41,11 +41,11 @@ export default new class Director {
     }
     add(step) {
         if(Steps[step.type] != undefined) {
-            console.log("%cSupported Step:", "color:black;", step)
+            // console.log("%cSupported Step:", "color:black;", step)
             this.steps.push(new Steps[step.type](step))
         } else {
-            console.log("%cUnsupported Step:", "color:red", step)
-            throw new Error()
+            // console.log("%cUnsupported Step:", "color:red", step)
+            throw new Error("Unsupported Step!!")
         }
     }
     update(delta) {

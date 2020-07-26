@@ -73,7 +73,7 @@ export default class Bomber {
         const position = new Point(this.position).round()
         if(this.input.wasJustPressed("<space>", delta.ms)
         && this.collection.has(position) == false) {
-            this.collection.add(new Bomb({"position": position, "power": 3}))
+            this.collection.add(new Bomb({"position": position, "power": 2}))
         }
     }
     copy() {

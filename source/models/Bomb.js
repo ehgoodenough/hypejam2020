@@ -12,11 +12,13 @@ export default class Bomb {
 
         this.power = power
         this.time = 0 // in seconds
+
+        this.fuse = 1.66
     }
     update(delta) {
         this.time += delta.s
 
-        if(this.time >= 1) {
+        if(this.time >= this.fuse) {
             this.explode()
         }
     }
@@ -50,16 +52,29 @@ export default class Bomb {
             // Recurse!!
             if(explosion.power > 0
             && explosion.isSnuffed != true) {
-                Object.values(Directions).forEach((direction) => {
+                if(explosion.direction == undefined) {
+                    Object.values(Directions).forEach((direction) => {
+                        explosions.push({
+                            "power": explosion.power - 1,
+                            "submark": explosion.submark + 1,
+                            "direction": direction,
+                            "position": new Point({
+                                "tx": explosion.position.tx + direction.x,
+                                "ty": explosion.position.ty + direction.y,
+                            })
+                        })
+                    })
+                } else {
                     explosions.push({
                         "power": explosion.power - 1,
                         "submark": explosion.submark + 1,
+                        "direction": explosion.direction,
                         "position": new Point({
-                            "tx": this.position.tx + direction.x,
-                            "ty": this.position.ty + direction.y,
+                            "tx": explosion.position.tx + explosion.direction.x,
+                            "ty": explosion.position.ty + explosion.direction.y,
                         })
                     })
-                })
+                }
             }
         }
 
