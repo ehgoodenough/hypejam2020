@@ -18,8 +18,8 @@ const app = new Pixi.Application({
     "width": frame.width,
     "height": frame.height,
     // "transparent": true,
-    // "backgroundColor": 0xf7c881, // true color
-    "backgroundColor": 0xEEEEEE,
+    "backgroundColor": 0xf7c881, // true color
+    // "backgroundColor": 0xEEEEEE,
 })
 
 ////////////////

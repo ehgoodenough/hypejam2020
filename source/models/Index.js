@@ -2,24 +2,19 @@ import Bomber from "models/Bomber.js"
 import Point from "models/utility/Point.js"
 import Collection from "models/utility/Collection.js"
 import Director from "models/Director.js"
+import Camera from "models/Camera.js"
 
 export default class Index {
     constructor() {
         this.entities = new Collection()
 
-        this.entities.add({
-            "key": "camera",
-            "type": "camera",
-            "position": {"x": 0, "y": 0},
-            "nudge": {"x": 0, "y": 0},
-            "zoom": 3,
-        })
+        this.entities.add(new Camera())
 
-        this.entities.add(new Bomber(require("data/bomber1.json")))
-        this.entities.add(new Bomber(require("data/bomber2.json")))
-        this.entities.add(new Bomber(require("data/bomber3.json")))
+        // this.entities.add(new Bomber(require("data/bomber1.json")))
+        // this.entities.add(new Bomber(require("data/bomber2.json")))
+        // this.entities.add(new Bomber(require("data/bomber3.json")))
 
-        // this.entities.add(new Bomber({"position": {"tx": 1, "ty": 4}}))
+        this.entities.add(new Bomber({"position": {"tx": 0, "ty": 4}}))
 
         const height = 5// 20
         const width = 5 // 36

@@ -2,17 +2,20 @@ import Point from "models/utility/Point.js"
 import {RecordKeyb, ReplayKeyb} from "models/utility/Keyb.js"
 import Bomb from "models/Bomb.js"
 
-const TILE = 16
+
+const IMAGES = {
+    "gooball": require("assets/images/gooball.png")
+}
 
 export default class Bomber {
-    constructor({position, input}) {
+    constructor({position, input, imagename}) {
         this.type = "bomber"
         this.velocity = {"x": 0, "y": 0}
         this.position = new Point(position)
         this.startingPosition = new Point(position)
-        this.image = require("assets/images/gooball.png")
+        this.imagename = imagename
 
-        this.speed = TILE * 8
+        this.speed = Point.TILE * 8
         this.deceleration = 0.05
 
         if(input != undefined) {
@@ -21,6 +24,9 @@ export default class Bomber {
             this.input = new RecordKeyb()
             window.bomber = this
         }
+    }
+    get image() {
+        return IMAGES[this.imagename || "gooball"]
     }
     update(delta) {
         if(this.input.update instanceof Function) {
@@ -66,6 +72,7 @@ export default class Bomber {
     }
     copy() {
         window.copy({
+            "imagename": this.imagename,
             "position": {
                 "x": this.startingPosition.x,
                 "y": this.startingPosition.y
