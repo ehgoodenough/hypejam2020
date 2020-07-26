@@ -323,6 +323,18 @@ Steps["trailer"] = class extends Step {
     }
 }
 
+// TODO: deprecate steps in favor of animations
+
+Steps["explosion"] = class extends Step {
+    constructor(step) {
+        super(step)
+
+        this.sequence = Step.generateAnimatedSequence({
+            "animation": Animations["explosion"](step),
+        })
+    }
+}
+
 /////////////////
 // ANIMATIONS //
 ///////////////
@@ -474,7 +486,7 @@ Animations["trailer"] = (step) => {
 
     step.substeps.forEach((substep) => {
         if(substep.type == "explosion") {
-            keyframes = keyframes.concat(Animations["explosion"](substep))
+            keyframes = keyframes.concat(Animations["explosion"](substep).keyframes)
         }
     })
     // keyframes.push({
@@ -551,7 +563,7 @@ Animations["explosion"] = function(step) {
             }
         })
     })
-    return keyframes
+    return {keyframes}
 }
 
 class Random {

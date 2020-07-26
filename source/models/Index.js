@@ -54,29 +54,33 @@ class Player {
         this.velocity.x = this.velocity.x < 0.0001 && this.velocity.x > -0.0001 ? 0 : this.velocity.x
         this.velocity.y = this.velocity.y < 0.0001 && this.velocity.y > -0.0001 ? 0 : this.velocity.y
 
-        const position = new Point(this.position, {"tiled": true})
+        const position = new Point(this.position).round()
         if(Keyb.wasJustPressed("<space>", delta.ms)
         && this.collection.has(position) == false) {
-            this.collection.add(new Bomb({"position": position, "distance": 3}))
+            this.collection.add(new Bomb({"position": position, "power": 3}))
         }
     }
 }
 
 class Point {
-    constructor({x, y}, {tiled} = {}) {
+    constructor({x, y, tx, ty}) {
         this.x = x
         this.y = y
 
-        if(tiled == true) {
-            this.x = this.tx * TILE
-            this.y = this.ty * TILE
-        }
+        if(tx !== undefined) this.tx = tx
+        if(ty !== undefined) this.ty = ty
     }
     get tx() {
         return Math.round(this.x / TILE)
     }
     get ty() {
         return Math.round(this.y / TILE)
+    }
+    set tx(tx) {
+        this.x = tx * TILE
+    }
+    set ty(ty) {
+        this.y = ty * TILE
     }
     get key() {
         return this.tx + "x" + this.ty
@@ -90,19 +94,67 @@ class Point {
     static key(point) {
         return point.x + "x" + point.y
     }
+    round() {
+        this.tx = this.tx
+        this.ty = this.ty
+        return this
+    }
 }
 
 class Bomb {
-    constructor({position, distance}) {
+    constructor({position, power}) {
         this.type = "bomb"
         this.position = position
         this.key = this.position.key
         this.image = require("assets/images/bomb.png")
 
-        this.time = 0
+        this.power = power
+        this.time = 0 // in seconds
     }
     update(delta) {
-        // console.log(delta)
+        this.time += delta.s
+
+        if(this.time >= 1) {
+            this.explode()
+        }
+    }
+    explode() {
+        if(this.hasExploded == true) return
+        this.hasExploded = true
+
+        const positionset = [
+            [this.position]
+        ]
+        for(let distance = 1; distance < this.power; distance += 1) {
+            const positions = []
+            Object.values(Directions).forEach((direction) => {
+                const position = new Point({
+                    "tx": this.position.tx + (direction.x * distance),
+                    "ty": this.position.ty + (direction.y * distance),
+                })
+                const collision = this.collection.get(position)
+                if(collision != undefined
+                && collision.type == "wall") {
+                    return
+                }
+                if(collision != undefined
+                && collision.type == "bomb") {
+                    //
+                }
+                positions.push(position)
+            })
+            positionset.push(positions)
+        }
+
+        console.log(positionset)
+
+        Director.add({
+            "mark": 0,
+            "type": "explosion",
+            "positions": positionset
+        })
+
+        this.collection.remove(this)
     }
 }
 
@@ -116,6 +168,9 @@ class Collection {
         value.collection = this
     }
     has(key) {
+        if(key.key != undefined) {
+            key = key.key
+        }
         return !!this.values[key]
     }
     remove(value) {
