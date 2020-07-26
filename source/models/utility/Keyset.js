@@ -41,7 +41,7 @@ export default class Keyset {
     static from(array) {
         const superset = {}
         array.forEach((value) => {
-            value.key = value.key || shortid.generate()
+            if(value.key == undefined) value.key = shortid.generate()
             superset[value.key] = value
         })
         return superset

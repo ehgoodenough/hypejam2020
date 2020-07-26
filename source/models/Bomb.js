@@ -24,6 +24,7 @@ export default class Bomb {
         if(this.hasExploded == true) return
         this.hasExploded = true
 
+        // const positions = [this.position]
         const positionset = [
             [this.position]
         ]
@@ -35,13 +36,17 @@ export default class Bomb {
                     "ty": this.position.ty + (direction.y * distance),
                 })
                 const collision = this.collection.get(position)
-                if(collision != undefined
-                && collision.type == "wall") {
-                    return
-                }
-                if(collision != undefined
-                && collision.type == "bomb") {
-                    //
+                if(collision != undefined) {
+                    console.log(collision)
+                    if(collision.type == "block") {
+                        return
+                    }
+                    if(collision.type == "boxblock") {
+                        this.collection.remove(collision) // REMOVE AS PART OF ANIMATION
+                    }
+                    if(collision.type == "bomb") {
+                        // ALSO EXPLODE THIS BOMB!!
+                    }
                 }
                 positions.push(position)
             })

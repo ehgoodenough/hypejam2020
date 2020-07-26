@@ -3,6 +3,17 @@ import Point from "models/utility/Point.js"
 import Collection from "models/utility/Collection.js"
 import Director from "models/Director.js"
 import Camera from "models/Camera.js"
+import Keyset from "models/utility/Keyset.js"
+
+const carvedOut = Keyset.from([
+    new Point({"tx": 0, "ty": 0}),
+    new Point({"tx": 0, "ty": 1}),
+    new Point({"tx": 1, "ty": 0}),
+    new Point({"tx": -1, "ty": 0}),
+    new Point({"tx": -2, "ty": 0}),
+    new Point({"tx": -2, "ty": 1}),
+    new Point({"tx": -2, "ty": -1}),
+])
 
 export default class Index {
     constructor() {
@@ -26,20 +37,20 @@ export default class Index {
 
         const height = 5// 20
         const width = 5 // 36
-        for(let x = -width; x <= width; x += 1) {
-            for(let y = -height; y <= height; y += 1) {
+        for(let tx = -width; tx <= width; tx += 1) {
+            for(let ty = -height; ty <= height; ty += 1) {
                 const block = {
                     "type": "block",
-                    "position": {"x": x * 16, "y": y * 16},
+                    "position": new Point({"tx": tx, "ty": ty}),
                     "image": require("assets/images/wall.png"),
                 }
-                block.key = Point.key({
-                    "x": block.position.x / Point.TILE,
-                    "y": block.position.y / Point.TILE,
-                })
-                if(x % 2 == 0 || y % 2 == 0) {
+                block.key = block.position.key
+                if(carvedOut[block.position.key] != undefined) {
+                    continue
+                }
+                if(tx % 2 == 0 || ty % 2 == 0) {
                     block.image = require("assets/images/crate.png")
-                    continue // DEBUG
+                    block.type = "boxblock"
                 }
                 this.entities.add(block)
             }
