@@ -4,16 +4,20 @@ import Bomb from "models/Bomb.js"
 
 
 const IMAGES = {
-    "gooball": require("assets/images/gooball.png")
+    "gooball": require("assets/images/gooball.png"),
+    "bomber": require("assets/images/bomber.jetpack.map.png"),
 }
+const EGGSHELL_WHITE = 0xeee6d2
 
 export default class Bomber {
-    constructor({position, input, imagename}) {
+    constructor({position, input, imagename, imagecolor}) {
         this.type = "bomber"
         this.velocity = {"x": 0, "y": 0}
         this.position = new Point(position)
         this.startingPosition = new Point(position)
-        this.imagename = imagename
+        this.imagename = imagename || "gooball"
+        this.imagecolor = imagecolor || "blue"
+        this.outline = {"color": EGGSHELL_WHITE, "thickness": 1}
 
         this.speed = Point.TILE * 8
         this.deceleration = 0.05
@@ -26,7 +30,7 @@ export default class Bomber {
         }
     }
     get image() {
-        return IMAGES[this.imagename || "gooball"]
+        return IMAGES[this.imagename]
     }
     update(delta) {
         if(this.input.update instanceof Function) {
@@ -34,9 +38,11 @@ export default class Bomber {
         }
         if(this.input.isPressed("<left>")) {
             this.velocity.x = -1 * this.speed * delta.s
+            this.direction = "left"
         }
         if(this.input.isPressed("<right>")) {
             this.velocity.x = this.speed * delta.s
+            this.direction = "right"
         }
         if(this.input.isPressed("<up>")) {
             this.velocity.y = -1 * this.speed * delta.s
@@ -73,6 +79,7 @@ export default class Bomber {
     copy() {
         window.copy({
             "imagename": this.imagename,
+            "imagecolor": this.imagecolor,
             "position": {
                 "x": this.startingPosition.x,
                 "y": this.startingPosition.y

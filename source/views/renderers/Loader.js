@@ -7,12 +7,15 @@ import * as Pixi from "pixi.js"
 const CENTER_BOTTOM_ANCHOR = {"x": 0.5, "y": 1}
 
 const resources = [
-    {"file": require("assets/images/red-monkey.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
-    {"file": require("assets/images/wall.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
-    {"file": require("assets/images/bad-wall.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
-    {"file": require("assets/images/crate.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
+    {"file": require("assets/images/bomber.jetpack.map.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
     {"file": require("assets/images/gooball.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
+    {"file": require("assets/images/wall.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
+    {"file": require("assets/images/crate.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
     {"file": require("assets/images/bomb.png"), "defaultAnchor": CENTER_BOTTOM_ANCHOR},
+    {"file": require("assets/images/blue.palette.png")},
+    {"file": require("assets/images/yellow.palette.png")},
+    {"file": require("assets/images/green.palette.png")},
+    {"file": require("assets/images/red.palette.png")},
 ]
 
 const loader = new Pixi.Loader()

@@ -14,7 +14,11 @@ export default class Index {
         // this.entities.add(new Bomber(require("data/bomber2.json")))
         // this.entities.add(new Bomber(require("data/bomber3.json")))
 
-        this.entities.add(new Bomber({"position": {"tx": 0, "ty": 4}}))
+        this.entities.add(new Bomber({
+            "position": {"tx": 0, "ty": 4},
+            "imagename": "bomber",
+            "imagecolor": "red"
+        }))
 
         const height = 5// 20
         const width = 5 // 36

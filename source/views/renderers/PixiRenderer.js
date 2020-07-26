@@ -2,13 +2,16 @@ import Index from "index"
 import * as Pixi from "pixi.js"
 import * as Preact from "preact"
 import {OutlineFilter} from "@pixi/filter-outline"
+import PaletteSwapFilter from "views/renderers/PaletteSwapFilter.js"
 
 import Loader from "views/renderers/Loader.js"
 
 Pixi.utils.skipHello()
 Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST
+Pixi.SCALE_MODES.DEFAULT = Pixi.SCALE_MODES.NEAREST
 // renderer.roundPixels = true
 
+// TODO: Merge this with data/frame.js
 const frame = {
     "width": 16 * 24*3,
     "height": 9 * 24*3,
@@ -21,6 +24,13 @@ const app = new Pixi.Application({
     "backgroundColor": 0xf7c881, // true color
     // "backgroundColor": 0xEEEEEE,
 })
+
+const PALETTE_IMAGES = {
+    "blue": require("assets/images/blue.palette.png"),
+    "yellow": require("assets/images/yellow.palette.png"),
+    "red": require("assets/images/red.palette.png"),
+    "green": require("assets/images/green.palette.png"),
+}
 
 ////////////////
 // RENDERING //
@@ -128,11 +138,22 @@ function createPixiComponent(pixi, entity) {
         // sprite.blendMode = Pixi.BLEND_MODES.MULTIPLY
         sprite.angle = entity.rotation || 0
 
+        if(entity.direction == "left") {
+            sprite.scale.x *= -1
+        }
+
         if(entity.grayscale != undefined) {
             sprite.filters = sprite.filters || []
             const filter = new Pixi.filters.ColorMatrixFilter()
             filter.alpha = entity.grayscale || 0
             filter.greyscale(0.33, false)
+            sprite.filters.push(filter)
+        }
+
+        if(entity.imagecolor != undefined
+        && PALETTE_IMAGES[entity.imagecolor] != undefined) {
+            sprite.filters = sprite.filters || []
+            const filter = new PaletteSwapFilter(PALETTE_IMAGES[entity.imagecolor])
             sprite.filters.push(filter)
         }
 
