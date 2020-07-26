@@ -13,43 +13,79 @@ const OTHER_POSITION = {"x": TILE * 5, "y": TILE * 2}
 class Player {
     constructor() {
         this.type = "player"
-        this.position = {"x": 100, "y": 100}
+        this.velocity = {"x": 0, "y": 0}
+        this.position = new Point({"x": 100, "y": 100})
         this.image = require("assets/images/red-monkey.png")
 
         this.speed = TILE * 8
     }
     update(delta) {
         if(Keyb.isPressed("<left>")) {
-            this.position.x -= this.speed * delta.s
+            this.velocity.x = -1 * this.speed * delta.s
         }
         if(Keyb.isPressed("<right>")) {
-            this.position.x += this.speed * delta.s
+            this.velocity.x = this.speed * delta.s
         }
         if(Keyb.isPressed("<up>")) {
-            this.position.y -= this.speed * delta.s
+            this.velocity.y = -1 * this.speed * delta.s
         }
         if(Keyb.isPressed("<down>")) {
-            this.position.y += this.speed * delta.s
+            this.velocity.y = this.speed * delta.s
         }
 
-        const position = {}
-        position.x = Math.round(this.position.x / TILE) * TILE
-        position.y = Math.round(this.position.y / TILE) * TILE
-        position.key = Point.toString(position)
+        const horizmove = new Point({"x": this.position.x + this.velocity.x, "y": this.position.y}, {"tiled": true})
+        if(horizmove.key != this.position.key
+        && this.collection.has(horizmove.key)) {
+            this.velocity.x = 0
+        }
 
+        const verticmove = new Point({"x": this.position.x + this.velocity.x, "y": this.position.y + this.velocity.y}, {"tiled": true})
+        if(verticmove.key != this.position.key
+        && this.collection.has(verticmove.key)) {
+            this.velocity.y = 0
+        }
+
+        this.position.x += this.velocity.x
+        this.position.y += this.velocity.y
+        this.velocity.x = 0
+        this.velocity.y = 0
+
+        // BOMBS //
+
+        const position = new Point(this.position, {"tiled": true})
         if(Keyb.wasJustPressed("<space>", delta.ms)
-        && this.collection.has(position.key) == false) {
+        && this.collection.has(position) == false) {
             this.collection.add(new Bomb({"position": position, "distance": 3}))
         }
     }
 }
 
 class Point {
-    // constructor({x, y}) {
-    //     this.x = x
-    //     this.y = y
-    // }
+    constructor({x, y}, {tiled} = {}) {
+        this.x = x
+        this.y = y
+
+        if(tiled == true) {
+            this.x = this.tx * TILE
+            this.y = this.ty * TILE
+        }
+    }
+    get tx() {
+        return Math.round(this.x / TILE)
+    }
+    get ty() {
+        return Math.round(this.y / TILE)
+    }
+    get key() {
+        return this.tx + "x" + this.ty
+    }
+    toString() {
+        return this.key
+    }
     static toString(point) {
+        return Point.key(point)
+    }
+    static key(point) {
         return point.x + "x" + point.y
     }
 }
@@ -58,9 +94,8 @@ class Bomb {
     constructor({position, distance}) {
         this.type = "bomb"
         this.position = position
+        this.key = this.position.key
         this.image = require("assets/images/bomb1.png")
-
-        this.key = this.position.key || Point.toString(this.position)
 
         this.time = 0
     }
@@ -113,10 +148,13 @@ export default class Index {
             for(let y = -height; y <= height; y += 1) {
                 const block = {
                     "type": "block",
-                    "key": shortid.generate(),
                     "position": {"x": x * 16, "y": y * 16},
                     "image": require("assets/images/wall.png"),
                 }
+                block.key = Point.key({
+                    "x": block.position.x / TILE,
+                    "y": block.position.y / TILE,
+                })
                 if(x % 2 == 0 || y % 2 == 0) {
                     block.image = require("assets/images/crate.png")
                     continue // DEBUG
