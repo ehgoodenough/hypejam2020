@@ -117,6 +117,9 @@ function createPixiComponent(pixi, entity) {
             sprite.position.x += entity.nudge.x || 0
             sprite.position.y += entity.nudge.y || 0
         }
+        // after position and rounding has been calculated, we round
+        sprite.position.x = Math.round(sprite.position.x)
+        sprite.position.y = Math.round(sprite.position.y)
         if(entity.opacity !== undefined) {
             sprite.alpha = entity.opacity
         }

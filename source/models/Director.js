@@ -161,11 +161,10 @@ class Step {
         // })
 
         function setFrame(currentFrame) {
-            let entity = Index.entities[currentFrame.key]
+            let entity = Index.entities.get(currentFrame.key)
             if(entity == undefined) {
-                Index.entities[currentFrame.key] = entity = {
-                    "key": currentFrame.key
-                }
+                entity = {"key": currentFrame.key}
+                Index.entities.add(entity)
             }
 
             if(currentFrame.position != undefined) {
@@ -199,7 +198,7 @@ class Step {
             }
 
             if(currentFrame.toBeDeleted == true) {
-                delete Index.entities[currentFrame.key]
+                delete Index.entities.get(currentFrame.key)
             }
 
             if(currentFrame.zoom != undefined) {
@@ -218,11 +217,12 @@ class Step {
         }
 
         function calculateFrame(currentFrame, tweenFrame, nextFrame) {
-            let entity = Index.entities[currentFrame.key]
+            let entity = Index.entities.get(currentFrame.key)
             if(entity == undefined) {
-                Index.entities[currentFrame.key] = entity = {
+                entity = {
                     "key": currentFrame.key
                 }
+                Index.entities.add(entity)
             }
 
             const progress = Math.max(0, Math.min(1, (tweenFrame.mark - currentFrame.mark) / (nextFrame.mark - currentFrame.mark)))

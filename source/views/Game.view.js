@@ -11,8 +11,8 @@ export default class Game {
         return (
             <div class="Game">
                 <PixiRenderer
-                    views={Object.values(Index.entities)}
-                    camera={Index.entities["camera"]}/>
+                    views={Index.entities.get()}
+                    camera={Index.entities.get("camera")}/>
             </div>
         )
     }
