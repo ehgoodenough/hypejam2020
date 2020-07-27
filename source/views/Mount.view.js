@@ -11,9 +11,7 @@ export default class Mount {
         return (
             <div class="Mount">
                 <title>{Index.title}</title>
-                <Frame>
-                    <Game/>
-                </Frame>
+                <Game/>
             </div>
         )
     }

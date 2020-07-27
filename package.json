@@ -24,6 +24,7 @@
     "rgb-hsv": "^1.0.0",
     "shortid": "^2.2.15",
     "statgrab": "^1.2.1",
+    "stats.js": "^0.17.0",
     "yaafloop": "^1.2.0"
   },
   "devDependencies": {

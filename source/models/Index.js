@@ -21,29 +21,29 @@ export default class Index {
 
         this.collection.add(new Camera())
 
-        this.collection.add(new Bomber(require("data/bomber1.json")))
-        this.collection.add(new Bomber(require("data/bomber2.json")))
-        this.collection.add(new Bomber(require("data/bomber3.json")))
-        this.collection.add(new Bomber(require("data/bomber4.json")))
-        this.collection.add(new Bomber(require("data/bomber5.json")))
-        this.collection.add(new Bomber(require("data/bomber6.json")))
-        this.collection.add(new Bomber(require("data/bomber7.json")))
+        // this.collection.add(new Bomber(require("data/bomber1.json")))
+        // this.collection.add(new Bomber(require("data/bomber2.json")))
+        // this.collection.add(new Bomber(require("data/bomber3.json")))
+        // this.collection.add(new Bomber(require("data/bomber4.json")))
+        // this.collection.add(new Bomber(require("data/bomber5.json")))
+        // this.collection.add(new Bomber(require("data/bomber6.json")))
+        // this.collection.add(new Bomber(require("data/bomber7.json")))
 
-        // this.collection.add(new Bomber({
-        //     "position": {"tx": -15, "ty": -10},
-        //     "imagename": "bomber",
-        //     "imagecolor": "blue"
-        // }))
+        this.collection.add(new Bomber({
+            "position": {"tx": 0, "ty": 0},
+            "imagename": "bomber",
+            "imagecolor": "blue"
+        }))
 
-        this.collection.add({
-            "image": require("assets/images/logo.png"),
-            "position": {"x": 0, "y": -200, "stack": 10000000},
-            "type": "logo",
-            "key": "logo",
-        })
+        // this.collection.add({
+        //     "image": require("assets/images/logo.png"),
+        //     "position": {"x": 0, "y": -200, "stack": 10000000},
+        //     "type": "logo",
+        //     "key": "logo",
+        // })
 
-        const height = 5// 20
-        const width = 7 // 36
+        const height = 20
+        const width = 36
         for(let tx = -width; tx <= width; tx += 1) {
             for(let ty = -height; ty <= height; ty += 1) {
                 const block = {
@@ -63,13 +63,15 @@ export default class Index {
             }
         }
 
-        Director.add({
-            "type": "trailer",
-        })
+        // Director.add({
+        //     "type": "trailer",
+        // })
     }
     update(delta) {
         // delta.s /= 8
         // delta.ms /= 8
+
+        // return // DEBUG
 
         this.collection.get().forEach((entity) => {
             if(entity.update instanceof Function) {
