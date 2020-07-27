@@ -34,15 +34,24 @@ if(__STAGE__ === "DEVELOPMENT") {
 import * as Preact from "preact"
 import Yaafloop from "yaafloop"
 
-import View from "views/Mount.view.js"
+// import View from "views/Mount.view.js"
 import Loader from "views/renderers/Loader.js"
+import PixiRenderer from "views/renderers/PixiRenderer.js"
+import "views/Mount.view.less"
+import "views/Frame.view.less"
 
 let loop = new Yaafloop(function(delta) {
     // console.log(delta.ms)
     stats.begin()
     // delta.ms /= 8
-    // if(Loader.isDone) index.update(delta)
-    this.view = Preact.render(<View/>, document.getElementById("subframe"), this.view)
+    if(Loader.isDone) {
+        index.update(delta)
+        PixiRenderer.update({
+            "viewmodels": index.collection.values,
+            "camera": index.collection.values["camera"]
+        })
+    }
+    // this.view = Preact.render(<View/>, document.getElementById("subframe"), this.view)
     stats.end()
 })
 

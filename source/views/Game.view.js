@@ -1,6 +1,5 @@
 import Index from "index"
 import * as Preact from "preact"
-import Keyset from "models/utility/Keyset.js"
 
 import PixiRenderer from "views/renderers/PixiRenderer.js"
 

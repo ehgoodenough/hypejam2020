@@ -1,6 +1,5 @@
 import * as Pixi from "pixi.js"
 
-
 // const TOP_LEFT_ANCHOR = {"x": 0, "y": 0}
 const CENTER_ANCHOR = {"x": 0.5, "y": 0.5}
 // const CENTER_BOTTOMISH_ANCHOR = {"x": 0.5, "y": 0.75}
