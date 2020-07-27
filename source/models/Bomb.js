@@ -2,6 +2,7 @@ import Director from "models/Director.js"
 
 import Directions from "models/utility/Directions.js"
 import Point from "models/utility/Point.js"
+import Geometry from "models/utility/Geometry.js"
 
 export default class Bomb {
     constructor({position, power}) {
@@ -40,10 +41,15 @@ export default class Bomb {
                 }
                 if(collision.type == "boxblock") {
                     explosion.toDestroy = collision
-                    explosion.isSnuffed = true
+                    // explosion.isSnuffed = true
+                    explosion.power = 0
                 }
-                if(collision.type == "bomb") {
-                    // ALSO EXPLODE THIS BOMB!!
+                if(collision.type == "bomb"
+                && collision.hasExploded != true) {
+                    const bomb = collision
+                    explosion.toDestroy = bomb
+                    explosion.power = Math.max(explosion.power, bomb.power)
+                    explosion.direction = undefined // go in all directions!!
                 }
             }
             Object.values(this.collection.values).forEach((entity) => {
@@ -56,8 +62,7 @@ export default class Bomb {
             superexplosions.push(explosion)
 
             // Recurse!!
-            if(explosion.power > 0
-            && explosion.isSnuffed != true) {
+            if(explosion.power > 0) {
                 if(explosion.direction == undefined) {
                     Object.values(Directions).forEach((direction) => {
                         explosions.push({
