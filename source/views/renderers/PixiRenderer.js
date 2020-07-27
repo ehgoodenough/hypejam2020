@@ -72,15 +72,17 @@ function updatePixi(viewmodels) {
         }
     })
 
-    Keyset.forEach(viewmodels, (view) => {
-        let sprite = app.stage.sprites[view.key]
+    Keyset.forEach(viewmodels, (viewmodel) => {
+        let sprite = app.stage.sprites[viewmodel.key]
         if(sprite == undefined) {
-            sprite = new Pixi.Sprite()
-            sprite.key = view.key
+            const texture = Loader.resources[viewmodel.image] && Loader.resources[viewmodel.image].texture
+            sprite = new Pixi.Sprite(texture)
+            sprite.key = viewmodel.key
             app.stage.addChild(sprite)
             app.stage.sprites[sprite.key] = sprite
         }
-        updatePixiSprite(view, sprite)
+
+        updatePixiSprite(viewmodel, sprite)
     })
 
     app.stage.sortChildren()
@@ -183,42 +185,54 @@ function updatePixiSprite(viewmodel, sprite) {
     // sprite.position.y = Math.round(sprite.position.y)
     if(viewmodel.opacity !== undefined) {
         sprite.alpha = viewmodel.opacity
+        // // sprite.blendMode = Pixi.BLEND_MODES.MULTIPLY
     }
-    // // sprite.blendMode = Pixi.BLEND_MODES.MULTIPLY
-    // if(viewmodel.grayscale != undefined) {
-    //     sprite.filters = sprite.filters || []
-    //     const filter = new Pixi.filters.ColorMatrixFilter()
-    //     filter.alpha = viewmodel.grayscale || 0
-    //     filter.greyscale(0.33, false)
-    //     sprite.filters.push(filter)
-    // }
-    // if(viewmodel.imagecolor != undefined
-    // && PALETTE_IMAGES[viewmodel.imagecolor] != undefined) {
-    //     sprite.filters = sprite.filters || []
-    //     const filter = new PaletteSwapFilter(PALETTE_IMAGES[viewmodel.imagecolor])
-    //     sprite.filters.push(filter)
-    // }
-    // if(viewmodel.whiteout != undefined) {
-    //     sprite.filters = sprite.filters || []
-    //     const filter = new Pixi.filters.ColorMatrixFilter()
-    //     filter.alpha = viewmodel.whiteout || 0
-    //     filter.contrast(10, true)
-    //     // filter.blackAndWhite(false)
-    //     // filter.browni(true)
-    //     // filter.brightness(1, true)
-    //     // filter.desaturate()
-    //     // filter.hue(90, true)
-    //     // filter.kodachrome(true)
-    //     // filter.lsd(true)
-    //     // filter.polaroid(true)
-    //     // filter.technicolor(true)
-    //     // filter.vintage(true)
-    //     sprite.filters.push(filter)
-    // }
-    // if(viewmodel.outline != undefined) {
-    //     sprite.filters = sprite.filters || []
-    //     sprite.filters.push(new OutlineFilter(viewmodel.outline.thickness, viewmodel.outline.color))
-    // }
+    if(viewmodel.grayscale != undefined) {
+        sprite.filters = sprite.filters || []
+        const filter = new Pixi.filters.ColorMatrixFilter()
+        filter.alpha = viewmodel.grayscale || 0
+        filter.greyscale(0.33, false)
+        sprite.filters.push(filter)
+    }
+    if(viewmodel.imagecolor != undefined
+    && PALETTE_IMAGES[viewmodel.imagecolor] != undefined) {
+        sprite.filters = sprite.filters || []
+        sprite.filtering = sprite.filtering || {}
+        if(sprite.filtering.imagecolor == undefined) {
+            sprite.filtering.imagecolor = new PaletteSwapFilter(PALETTE_IMAGES[viewmodel.imagecolor])
+            sprite.filters.push(sprite.filtering.imagecolor)
+        }
+    }
+    if(viewmodel.whiteout != undefined) {
+        sprite.filters = sprite.filters || []
+        sprite.filtering = sprite.filtering || {}
+        if(sprite.filtering.colormatrix == undefined) {
+            sprite.filtering.colormatrix = new Pixi.filters.ColorMatrixFilter()
+            sprite.filters.push(sprite.filtering.colormatrix)
+            // filter.blackAndWhite(false)
+            // filter.browni(true)
+            // filter.brightness(1, true)
+            // filter.desaturate()
+            // filter.hue(90, true)
+            // filter.kodachrome(true)
+            // filter.lsd(true)
+            // filter.polaroid(true)
+            // filter.technicolor(true)
+            // filter.vintage(true)
+        }
+        sprite.filtering.colormatrix.alpha = viewmodel.whiteout || 0
+        sprite.filtering.colormatrix.contrast(10, true)
+    }
+    if(viewmodel.outline != undefined) {
+        sprite.filters = sprite.filters || []
+        sprite.filtering = sprite.filtering || {}
+        if(sprite.filtering.outline == undefined) {
+            sprite.filtering.outline = new OutlineFilter(viewmodel.outline.thickness, viewmodel.outline.color)
+            sprite.filters.push(sprite.filtering.outline)
+        }
+        sprite.filtering.outline.thickness = viewmodel.outline.thickness
+        sprite.filtering.outline.color = viewmodel.outline.color
+    }
     return sprite
 }
 
