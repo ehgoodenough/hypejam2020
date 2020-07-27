@@ -144,9 +144,19 @@ class Step {
                 maxmark = keyframe.mark
             }
         })
-        // Keyset.forEach(animation.timelines, (timeline) => {
-        //     timeline.sort()
-        // })
+        // maxmark += 10 // just in case..?
+
+        Keyset.forEach(animation.timelines, (timeline) => {
+            timeline.sort((a, b) => {
+                if(a.mark < b.mark) {
+                    return -1
+                }
+                if(a.mark > b.mark) {
+                    return +1
+                }
+                return 0
+            })
+        })
 
         function setFrame(currentFrame) {
             let entity = Index.collection.get(currentFrame.key)
@@ -265,7 +275,8 @@ class Step {
                         Keyset.forEach(animation.timelines, (timeline) => {
                             if(timeline[1] != undefined
                             && timeline[1].mark < tweenFrame.mark) {
-                                // setFrame(timeline[0])
+                                setFrame(timeline[0])
+                                setFrame(timeline[1])
                                 return timeline.shift()
                             }
                             if(timeline[0] != undefined
@@ -543,7 +554,7 @@ Animations["explosion"] = function(step) {
     const keyframes = []
     step.explosions.forEach((explosion) => {
         for(let i = 0; i < SMOKE_COUNT; i += 1) {
-            const mark = step.mark + (explosion.submark * 100) + (Math.random() * 100)
+            const mark = step.mark + (explosion.submark * 50) + (Math.random() * 100)
             const key = "explosion:" + shortid.generate()
             if(explosion.toDestroy != undefined) {
                 keyframes.push({
@@ -574,7 +585,7 @@ Animations["explosion"] = function(step) {
             })
             keyframes.push({
                 "key": key,
-                "mark": step.mark + (explosion.submark * 100) + 500,
+                "mark": step.mark + (explosion.submark * 150) + 500,
                 "timing": Timings.easeOut,
                 "radius": 0,
                 "color": 0x543935,

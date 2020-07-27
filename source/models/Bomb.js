@@ -13,7 +13,8 @@ export default class Bomb {
         this.power = power
         this.time = 0 // in seconds
 
-        this.fuse = 1.66
+        // this.fuse = 1.66 // in seconds
+        this.fuse = 1 // in seconds
     }
     update(delta) {
         this.time += delta.s

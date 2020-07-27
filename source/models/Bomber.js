@@ -71,8 +71,8 @@ export default class Bomber {
         this.velocity.y = this.velocity.y < 0.0001 && this.velocity.y > -0.0001 ? 0 : this.velocity.y
 
         const position = new Point(this.position).round()
-        if(this.input.wasJustPressed("<space>", delta.ms)
-        && this.collection.has(position) == false) {
+        if(this.input.wasJustPressed("<space>")) {
+        // && this.collection.has(position) == false) {
             this.collection.add(new Bomb({"position": position, "power": 2}))
         }
     }
