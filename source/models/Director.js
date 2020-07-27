@@ -543,22 +543,6 @@ Animations["trailer"] = (step) => {
     //     "key": "camera",
     //     "color": 0x000000,
     // })
-
-    // for(var i = 0; i < SCREEN_SHAKE_COUNT; i += 1) {
-    //     keyframes.push({
-    //         "mark": i * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
-    //         "key": "camera",
-    //         "nudge": {
-    //             "x": Math.round(Random.range(2, 2)) * Random.sign(),
-    //             "y": Math.round(Random.range(2, 2)) * Random.sign(),
-    //         }
-    //     })
-    // }
-    // keyframes.push({
-    //     "mark": (i + 1) * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
-    //     "key": "camera",
-    //     "nudge": {"x": 0, "y": 0},
-    // })
     return {keyframes}
 }
 
@@ -591,16 +575,16 @@ Animations["explosion"] = function(step) {
                     })
                     keyframes.push({
                         "mark": explosion.submark + 500,
-                        // "timing": Timings.easeOut,
+                        "timing": Timings.linear,
                         "position": {
-                            "x": explosion.collision.position.x + (explosion.direction.x * 100),
+                            "x": explosion.collision.position.x + (explosion.direction ? (explosion.direction.x || 1) * 100 : 1),
                             "y": -400,
                         },
                         "scale": {
                             "x": 3,
                             "y": 3,
                         },
-                        "rotation": 360 * 2 * explosion.direction.x,
+                        "rotation": 360 * 2 * (explosion.direction ? explosion.direction.x || 1 : 1),
                         "key": explosion.collision.key,
                         "toBeDeleted": true,
                     })
@@ -641,6 +625,22 @@ Animations["explosion"] = function(step) {
             })
         }
     })
+
+    // for(var i = 0; i < SCREEN_SHAKE_COUNT; i += 1) {
+    //     keyframes.push({
+    //         "mark": i * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
+    //         "key": "camera",
+    //         "nudge": {
+    //             "x": Math.round(Random.range(2, 2)) * Random.sign(),
+    //             "y": Math.round(Random.range(2, 2)) * Random.sign(),
+    //         }
+    //     })
+    // }
+    // keyframes.push({
+    //     "mark": (i + 1) * SCREEN_SHAKE_COUNT * SCREEN_SHAKE_TIME,
+    //     "key": "camera",
+    //     "nudge": {"x": 0, "y": 0},
+    // })
     return {keyframes}
 }
 

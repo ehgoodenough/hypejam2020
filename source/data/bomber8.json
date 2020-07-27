@@ -1,91 +1,361 @@
 {
   "imagename": "bomber",
-  "imagecolor": "blue",
+  "imagecolor": "yellow",
   "position": {
-    "x": -32,
-    "y": 112
+    "x": 304,
+    "y": 128
   },
   "input": {
     "events": [
       {
-        "key": "<up>",
+        "key": "<left>",
         "pressed": true,
-        "time": 2094.6449997718446
-      },
-      {
-        "key": "<up>",
-        "pressed": false,
-        "time": 3831.889999913983
+        "time": 304.1150000644848
       },
       {
         "key": "<right>",
         "pressed": true,
-        "time": 3881.3099999679253
+        "time": 617.5700002349913
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 631.2750002252869
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 878.6800000234507
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 926.7400000244379
       },
       {
         "key": "<right>",
         "pressed": false,
-        "time": 4210.989999992307
+        "time": 1233.2600001245737
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 1233.2600001245737
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 1319.4300000322983
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 1513.6099999654107
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 1861.609999963548
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 1960.4999999864958
+      },
+      {
+        "key": "<space>",
+        "pressed": true,
+        "time": 2130.5750000174157
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 2140.2000000234693
+      },
+      {
+        "key": "<space>",
+        "pressed": false,
+        "time": 2172.4850000464357
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 2172.4850000464357
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 2265.310000104364
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 2295.020000077784
       },
       {
         "key": "<down>",
         "pressed": true,
-        "time": 4480.404999980237
-      },
-      {
-        "key": "<left>",
-        "pressed": true,
-        "time": 4955.259999958798
+        "time": 2467.20999997342
       },
       {
         "key": "<left>",
         "pressed": false,
-        "time": 5013.150000013411
+        "time": 2497.800000011921
       },
       {
         "key": "<left>",
         "pressed": true,
-        "time": 5571.2100000237115
-      },
-      {
-        "key": "<left>",
-        "pressed": false,
-        "time": 5607.599999988452
-      },
-      {
-        "key": "<right>",
-        "pressed": true,
-        "time": 6618.064999871422
+        "time": 2557.6200000359677
       },
       {
         "key": "<down>",
         "pressed": false,
-        "time": 6657.30999992229
+        "time": 2557.6200000359677
+      },
+      {
+        "key": "<down>",
+        "pressed": true,
+        "time": 2587.650000001304
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 2618.244999961462
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 2818.0950000532903
       },
       {
         "key": "<right>",
         "pressed": false,
-        "time": 7161.47999977693
+        "time": 2899.275000032503
+      },
+      {
+        "key": "<down>",
+        "pressed": false,
+        "time": 2912.425000045914
       },
       {
         "key": "<up>",
         "pressed": true,
-        "time": 7298.259999719448
-      },
-      {
-        "key": "<left>",
-        "pressed": true,
-        "time": 9193.549999967217
+        "time": 3302.609999955166
       },
       {
         "key": "<up>",
         "pressed": false,
-        "time": 9232.625000004191
+        "time": 3671.95999994874
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 3715.4499999596737
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 4015.8950000768527
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 4015.8950000768527
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 4053.8350000279024
+      },
+      {
+        "key": "<space>",
+        "pressed": true,
+        "time": 4174.594999989495
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 4187.524999957532
+      },
+      {
+        "key": "<space>",
+        "pressed": false,
+        "time": 4243.86499990942
       },
       {
         "key": "<left>",
         "pressed": false,
-        "time": 10596.34999994887
+        "time": 4584.875000058673
+      },
+      {
+        "key": "<down>",
+        "pressed": true,
+        "time": 4600.905000057537
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 4953.319999971427
+      },
+      {
+        "key": "<down>",
+        "pressed": false,
+        "time": 5023.589999938849
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 5034.959999960847
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 5275.564999785274
+      },
+      {
+        "key": "<up>",
+        "pressed": true,
+        "time": 5328.589999815449
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 5328.589999815449
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 5411.764999793377
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 5480.749999755062
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 5544.359999708831
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 5610.929999849759
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 5662.184999906458
+      },
+      {
+        "key": "<up>",
+        "pressed": false,
+        "time": 5674.819999898318
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 5828.715000010561
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 5909.50500004692
+      },
+      {
+        "key": "<down>",
+        "pressed": true,
+        "time": 5976.815000060014
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 6017.160000046715
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 6033.5500000510365
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 6062.530000053812
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 6084.665000089444
+      },
+      {
+        "key": "<down>",
+        "pressed": false,
+        "time": 6084.665000089444
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 6120.580000104383
+      },
+      {
+        "key": "<down>",
+        "pressed": true,
+        "time": 6120.580000104383
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 6147.040000127163
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 6174.955000111368
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 6208.045000035781
+      },
+      {
+        "key": "<down>",
+        "pressed": false,
+        "time": 6265.165000106208
+      },
+      {
+        "key": "<right>",
+        "pressed": true,
+        "time": 6338.535000162665
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 6353.950000135228
+      },
+      {
+        "key": "<right>",
+        "pressed": false,
+        "time": 6382.530000119004
+      },
+      {
+        "key": "<up>",
+        "pressed": true,
+        "time": 6488.885000057053
+      },
+      {
+        "key": "<left>",
+        "pressed": true,
+        "time": 6647.115000174381
+      },
+      {
+        "key": "<up>",
+        "pressed": false,
+        "time": 6647.115000174381
+      },
+      {
+        "key": "<left>",
+        "pressed": false,
+        "time": 6738.410000107251
       }
     ]
   }

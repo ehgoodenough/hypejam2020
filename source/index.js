@@ -5,7 +5,7 @@ const stats = new Stats()
 stats.showPanel(0)
 stats.dom.style.position = "absolute"
 // document.body.appendChild(stats.dom)
-document.getElementById("frame").appendChild(stats.dom)
+// document.getElementById("frame").appendChild(stats.dom)
 
 ////////////
 // Index //
