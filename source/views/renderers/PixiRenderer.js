@@ -46,8 +46,8 @@ function update({viewmodels, camera}) {
 
     if(camera != undefined
     && camera.position != undefined) {
-        app.stage.position.x = camera.position.x - (app.renderer.width / 2)
-        app.stage.position.y = camera.position.y - (app.renderer.height / 2)
+        app.stage.position.x = camera.position.x - (app.renderer.width / 2) + 2 // - (Point.TILE / 2)
+        app.stage.position.y = camera.position.y - (app.renderer.height / 2) // - (Point.TILE / 2)
         if(camera.nudge != undefined) {
             app.stage.position.x += camera.nudge.x || 0
             app.stage.position.y += camera.nudge.y || 0
@@ -168,12 +168,13 @@ function updatePixiSprite(viewmodel, sprite) {
         sprite.position.x = viewmodel.position.x
         sprite.position.y = viewmodel.position.y
         sprite.zIndex = (viewmodel.position.y * 10)
-        // if(sprite.position.stack != undefined) {
-        //     sprite.zIndex += sprite.position.stack
-        // }
+        // BECAUSE GRAPHICS DON'T HAVE ... ANCHORS
         if(sprite instanceof Pixi.Graphics) {
             sprite.position.y -= Point.TILE / 2
         }
+    }
+    if(viewmodel.stack != undefined) {
+        sprite.zIndex = viewmodel.stack
     }
     if(viewmodel.nudge != undefined) {
         // why isn't this in a view model...

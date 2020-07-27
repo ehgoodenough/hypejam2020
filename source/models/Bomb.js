@@ -40,14 +40,14 @@ export default class Bomb {
                     continue
                 }
                 if(collision.type == "boxblock") {
-                    explosion.toDestroy = collision
-                    // explosion.isSnuffed = true
+                    const boxblock = collision
+                    explosion.collision = boxblock
                     explosion.power = 0
                 }
                 if(collision.type == "bomb"
                 && collision.hasExploded != true) {
                     const bomb = collision
-                    explosion.toDestroy = bomb
+                    explosion.collision = bomb
                     explosion.power = Math.max(explosion.power, bomb.power)
                     explosion.direction = undefined // go in all directions!!
                 }
@@ -55,7 +55,7 @@ export default class Bomb {
             Object.values(this.collection.values).forEach((entity) => {
                 if(entity.type == "bomber"
                 && entity.position.key == explosion.position.key) {
-                    explosion.toDestroy = entity // TODO: play cute animation instead
+                    explosion.collision = entity
                 }
             })
 

@@ -169,8 +169,10 @@ class Step {
                 entity.position = {
                     "x": currentFrame.position.x,
                     "y": currentFrame.position.y,
-                    "stack": currentFrame.position.stack,
                 }
+            }
+            if(currentFrame.stack) {
+                entity.stack = currentFrame.stack
             }
 
             if(currentFrame.scale != undefined) {
@@ -212,6 +214,9 @@ class Step {
             if(currentFrame.flash != undefined) {
                 entity.flash = currentFrame.flash
             }
+            if(currentFrame.rotation != undefined) {
+                entity.rotation = currentFrame.rotation
+            }
         }
 
         function calculateFrame(currentFrame, tweenFrame, nextFrame) {
@@ -230,8 +235,11 @@ class Step {
                 entity.position = {
                     "x": tween(currentFrame.position.x, nextFrame.position.x, timing(progress)),
                     "y": tween(currentFrame.position.y, nextFrame.position.y, timing(progress)),
-                    "stack": tween(currentFrame.position.stack, nextFrame.position.stack, timing(progress)),
                 }
+            }
+
+            if(currentFrame.stack != undefined && nextFrame.stack != undefined) {
+                entity.stack = tween(currentFrame.stack, nextFrame.stack, timing(progress))
             }
 
             if(currentFrame.scale != undefined && nextFrame.scale != undefined) {
@@ -258,6 +266,10 @@ class Step {
 
             if(currentFrame.radius != undefined && nextFrame.radius != undefined) {
                 entity.radius = tween(currentFrame.radius, nextFrame.radius, timing(progress))
+            }
+
+            if(currentFrame.rotation != undefined && nextFrame.rotation != undefined) {
+                entity.rotation = tween(currentFrame.rotation, nextFrame.rotation, timing(progress))
             }
 
             if(currentFrame.color != undefined && nextFrame.color != undefined) {
@@ -556,16 +568,53 @@ Animations["explosion"] = function(step) {
         for(let i = 0; i < SMOKE_COUNT; i += 1) {
             const mark = step.mark + (explosion.submark * 50) + (Math.random() * 100)
             const key = "explosion:" + shortid.generate()
-            if(explosion.toDestroy != undefined) {
-                keyframes.push({
-                    "mark": 0,
-                    "key": explosion.toDestroy.key,
-                })
-                keyframes.push({
-                    "mark": mark,
-                    "key": explosion.toDestroy.key,
-                    "toBeDeleted": true,
-                })
+            if(explosion.collision != undefined) {
+                if(explosion.collision.type == "bomber") {
+                    keyframes.push({
+                        "mark": 0,
+                        "key": explosion.collision.key,
+                        "position": explosion.collision.position,
+                    })
+                    keyframes.push({
+                        "mark": explosion.submark,
+                        "key": explosion.collision.key,
+                        "position": {
+                            "x": explosion.collision.position.x,
+                            "y": explosion.collision.position.y,
+                        },
+                        "scale": {
+                            "x": 1,
+                            "y": 1,
+                        },
+                        "stack": 10000,
+                        "rotation": 0,
+                    })
+                    keyframes.push({
+                        "mark": explosion.submark + 500,
+                        // "timing": Timings.easeOut,
+                        "position": {
+                            "x": explosion.collision.position.x + (explosion.direction.x * 100),
+                            "y": -400,
+                        },
+                        "scale": {
+                            "x": 3,
+                            "y": 3,
+                        },
+                        "rotation": 360 * 2 * explosion.direction.x,
+                        "key": explosion.collision.key,
+                        "toBeDeleted": true,
+                    })
+                } else {
+                    keyframes.push({
+                        "mark": 0,
+                        "key": explosion.collision.key,
+                    })
+                    keyframes.push({
+                        "mark": mark,
+                        "key": explosion.collision.key,
+                        "toBeDeleted": true,
+                    })
+                }
             }
             keyframes.push({
                 "key": key,
@@ -573,7 +622,6 @@ Animations["explosion"] = function(step) {
                 "position": {
                     "x": explosion.position.x,
                     "y": explosion.position.y,
-                    "stack": 2,
                 },
                 "nudge": {
                     "x": Math.round(Random.range(2, 6)) * Random.sign(),
