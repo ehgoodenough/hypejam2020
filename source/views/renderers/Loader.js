@@ -2,7 +2,7 @@ import * as Pixi from "pixi.js"
 
 
 // const TOP_LEFT_ANCHOR = {"x": 0, "y": 0}
-// const CENTER_ANCHOR = {"x": 0.5, "y": 0.5}
+const CENTER_ANCHOR = {"x": 0.5, "y": 0.5}
 // const CENTER_BOTTOMISH_ANCHOR = {"x": 0.5, "y": 0.75}
 const CENTER_BOTTOM_ANCHOR = {"x": 0.5, "y": 1}
 
@@ -16,6 +16,7 @@ const resources = [
     {"file": require("assets/images/yellow.palette.png")},
     {"file": require("assets/images/green.palette.png")},
     {"file": require("assets/images/red.palette.png")},
+    {"file": require("assets/images/logo.png"), "defaultAnchor": CENTER_ANCHOR},
 ]
 
 const loader = new Pixi.Loader()

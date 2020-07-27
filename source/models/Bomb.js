@@ -48,7 +48,7 @@ export default class Bomb {
             Object.values(this.collection.values).forEach((entity) => {
                 if(entity.type == "bomber"
                 && entity.position.key == explosion.position.key) {
-                    explosion.toDestroy = entity
+                    explosion.toDestroy = entity // TODO: play cute animation instead
                 }
             })
 

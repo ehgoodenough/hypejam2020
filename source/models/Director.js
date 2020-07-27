@@ -149,10 +149,10 @@ class Step {
         // })
 
         function setFrame(currentFrame) {
-            let entity = Index.entities.get(currentFrame.key)
+            let entity = Index.collection.get(currentFrame.key)
             if(entity == undefined) {
                 entity = {"key": currentFrame.key}
-                Index.entities.add(entity)
+                Index.collection.add(entity)
             }
 
             if(currentFrame.position != undefined) {
@@ -181,12 +181,12 @@ class Step {
                 entity.whiteout = currentFrame.whiteout
             }
 
-            if(currentFrame.image != undefined) {
+            if(currentFrame.image !== undefined) {
                 entity.image = currentFrame.image
             }
 
             if(currentFrame.toBeDeleted == true) {
-                Index.entities.remove({"key": currentFrame.key})
+                Index.collection.remove({"key": currentFrame.key})
             }
 
             if(currentFrame.zoom != undefined) {
@@ -205,12 +205,12 @@ class Step {
         }
 
         function calculateFrame(currentFrame, tweenFrame, nextFrame) {
-            let entity = Index.entities.get(currentFrame.key)
+            let entity = Index.collection.get(currentFrame.key)
             if(entity == undefined) {
                 entity = {
                     "key": currentFrame.key
                 }
-                Index.entities.add(entity)
+                Index.collection.add(entity)
             }
 
             const progress = Math.max(0, Math.min(1, (tweenFrame.mark - currentFrame.mark) / (nextFrame.mark - currentFrame.mark)))
@@ -472,22 +472,43 @@ const SCREEN_SHAKE_TIME = 5
 Animations["trailer"] = (step) => {
     let keyframes = []
 
-    step.substeps.forEach((substep) => {
-        if(substep.type == "explosion") {
-            keyframes = keyframes.concat(Animations["explosion"](substep).keyframes)
-        }
+    // step.substeps.forEach((substep) => {
+    //     if(substep.type == "explosion") {
+    //         keyframes = keyframes.concat(Animations["explosion"](substep).keyframes)
+    //     }
+    // })
+    keyframes.push({
+        "mark": 0,
+        "key": "camera",
+        "zoom": 5,
     })
-    // keyframes.push({
-    //     "mark": 0,
-    //     "key": "camera",
-    //     "zoom": 5,
-    // })
-    // keyframes.push({
-    //     "mark": 9000,
-    //     "key": "camera",
-    //     "zoom": 1,
-    //     // "timing": Timings.easeOut,
-    // })
+    keyframes.push({
+        "mark": 866.744999832008 + (1.75 * 1000) + 100,
+        "key": "camera",
+        "zoom": 5,
+    })
+    keyframes.push({
+        "mark": 9000,
+        "key": "camera",
+        "zoom": 1,
+        "timing": Timings.easeOut,
+    })
+    keyframes.push({
+        "mark": 0,
+        "key": "logo",
+        "position": {"x": 0, "y": 1000},
+    })
+    keyframes.push({
+        "mark": 9000,
+        "key": "logo",
+        "position": {"x": 0, "y": 1000},
+    })
+    keyframes.push({
+        "mark": 9000+100,
+        "key": "logo",
+        "position": {"x": 0, "y": -200},
+        "timing": Timings.easeOut,
+    })
 
     // keyframes.push({
     //     "mark": 0,

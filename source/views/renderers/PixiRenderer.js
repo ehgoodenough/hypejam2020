@@ -123,6 +123,12 @@ function createPixiComponent(pixi, entity) {
             sprite.position.x = entity.position.x
             sprite.position.y = entity.position.y
             sprite.zIndex = (entity.position.y * 10)
+            // if(sprite.position.stack != undefined) {
+            //     sprite.zIndex += sprite.position.stack
+            // }
+        }
+        if(entity.type == "logo") {
+            sprite.zIndex = 10000
         }
         // THIS IS A VERY SPECIFIC ATTRIBUTE
         if(entity.nudge != undefined) {

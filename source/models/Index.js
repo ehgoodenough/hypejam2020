@@ -17,26 +17,33 @@ const carvedOut = Keyset.from([
 
 export default class Index {
     constructor() {
-        this.entities = new Collection()
+        this.collection = new Collection()
 
-        this.entities.add(new Camera())
+        this.collection.add(new Camera())
 
-        this.entities.add(new Bomber(require("data/bomber1.json")))
-        this.entities.add(new Bomber(require("data/bomber2.json")))
-        // this.entities.add(new Bomber(require("data/bomber3.json")))
-        // this.entities.add(new Bomber(require("data/bomber4.json")))
-        // this.entities.add(new Bomber(require("data/bomber5.json")))
-        // this.entities.add(new Bomber(require("data/bomber6.json")))
-        // this.entities.add(new Bomber(require("data/bomber7.json")))
+        this.collection.add(new Bomber(require("data/bomber1.json")))
+        this.collection.add(new Bomber(require("data/bomber2.json")))
+        this.collection.add(new Bomber(require("data/bomber3.json")))
+        this.collection.add(new Bomber(require("data/bomber4.json")))
+        this.collection.add(new Bomber(require("data/bomber5.json")))
+        this.collection.add(new Bomber(require("data/bomber6.json")))
+        this.collection.add(new Bomber(require("data/bomber7.json")))
 
-        this.entities.add(new Bomber({
-            "position": {"tx": -7, "ty": -1},
-            "imagename": "bomber",
-            "imagecolor": "blue"
-        }))
+        // this.collection.add(new Bomber({
+        //     "position": {"tx": -15, "ty": -10},
+        //     "imagename": "bomber",
+        //     "imagecolor": "blue"
+        // }))
+
+        this.collection.add({
+            "image": require("assets/images/logo.png"),
+            "position": {"x": 0, "y": -200, "stack": 10000000},
+            "type": "logo",
+            "key": "logo",
+        })
 
         const height = 5// 20
-        const width = 5 // 36
+        const width = 7 // 36
         for(let tx = -width; tx <= width; tx += 1) {
             for(let ty = -height; ty <= height; ty += 1) {
                 const block = {
@@ -52,71 +59,24 @@ export default class Index {
                     block.image = require("assets/images/crate.png")
                     block.type = "boxblock"
                 }
-                this.entities.add(block)
+                this.collection.add(block)
             }
         }
 
-        // this.play()
+        Director.add({
+            "type": "trailer",
+        })
     }
     update(delta) {
         // delta.s /= 8
         // delta.ms /= 8
 
-        this.entities.get().forEach((entity) => {
+        this.collection.get().forEach((entity) => {
             if(entity.update instanceof Function) {
                 entity.update(delta)
             }
         })
 
         Director.update(delta)
-    }
-    play() {
-        Director.add({
-            "type": "trailer",
-            "substeps": [
-                {
-                    "mark": 1000,
-                    "type": "explosion",
-                    "positions": [
-                        [
-                            CENTER_POSITION
-                        ],
-                        [
-                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.north, TILE)),
-                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.south, TILE)),
-                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.east, TILE)),
-                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.west, TILE)),
-                        ],
-                        [
-                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.north, TILE * 2)),
-                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.south, TILE * 2)),
-                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.east, TILE * 2)),
-                            Geometry.add(CENTER_POSITION, Geometry.multiply(Directions.west,TILE * 2)),
-                        ],
-                    ]
-                },
-                {
-                    "mark": 2000,
-                    "type": "explosion",
-                    "positions": [
-                        [
-                            OTHER_POSITION
-                        ],
-                        [
-                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.north, TILE)),
-                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.south, TILE)),
-                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.east, TILE)),
-                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.west, TILE)),
-                        ],
-                        [
-                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.north, TILE * 2)),
-                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.south, TILE * 2)),
-                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.east, TILE * 2)),
-                            Geometry.add(OTHER_POSITION, Geometry.multiply(Directions.west,TILE * 2)),
-                        ],
-                    ]
-                }
-            ],
-        })
     }
 }
