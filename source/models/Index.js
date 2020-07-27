@@ -20,6 +20,7 @@ export default class Index {
         this.collection = new Collection()
 
         this.collection.add(new Camera())
+        this.collection.values.camera.zoom = 4
 
         // this.collection.add(new Bomber(require("data/bomber1.json")))
         // this.collection.add(new Bomber(require("data/bomber2.json")))

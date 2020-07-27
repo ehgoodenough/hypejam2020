@@ -1,8 +1,8 @@
 import Index from "index"
 import * as Pixi from "pixi.js"
-import * as Preact from "preact"
 import {OutlineFilter} from "@pixi/filter-outline"
 import Keyset from "models/utility/Keyset.js"
+import Point from "models/utility/Point.js"
 import PaletteSwapFilter from "views/renderers/PaletteSwapFilter.js"
 
 import Loader from "views/renderers/Loader.js"
@@ -74,10 +74,9 @@ function updatePixi(viewmodels) {
 
     Keyset.forEach(viewmodels, (viewmodel) => {
         let sprite = app.stage.sprites[viewmodel.key]
+
         if(sprite == undefined) {
-            const texture = Loader.resources[viewmodel.image] && Loader.resources[viewmodel.image].texture
-            sprite = new Pixi.Sprite(texture)
-            sprite.key = viewmodel.key
+            sprite = createPixiSprite(viewmodel)
             app.stage.addChild(sprite)
             app.stage.sprites[sprite.key] = sprite
         }
@@ -88,8 +87,23 @@ function updatePixi(viewmodels) {
     app.stage.sortChildren()
 }
 
+function createPixiSprite(viewmodel) {
+    let sprite = undefined
+    // TODO: Combine this with the updatePixiSprite so it can JIT create it.
+    // TODO: is radius really the trigger for generic graphics?
+    if(viewmodel.radius != undefined) {
+        sprite = new Pixi.Graphics()
+    } else {
+        sprite = new Pixi.Sprite()
+    }
+
+    sprite.key = viewmodel.key
+    return sprite
+}
+
 function updatePixiSprite(viewmodel, sprite) {
-    if(viewmodel == undefined) {
+    if(viewmodel == undefined
+    || sprite == undefined) {
         return
     }
     // if(viewmodel instanceof Array) {
@@ -125,44 +139,29 @@ function updatePixiSprite(viewmodel, sprite) {
     if(viewmodel.type == "camera") {
         return
     }
-    // if(viewmodel.radius != undefined) {
-    //     const graphics = new Pixi.Graphics()
-    //     // const graphics2 = new Pixi.Graphics()
-    //     graphics.beginFill(viewmodel.color)
-    //     // graphics2.beginFill(viewmodel.color)
-    //     graphics.lineStyle(0)
-    //     // graphics2.lineStyle(1, 0x543935)
-    //     // graphics2.lineStyle(1, 0xfeeae0)
-    //     let x = viewmodel.position.x
-    //     let y = viewmodel.position.y
-    //     if(viewmodel.nudge != undefined) {
-    //         x += viewmodel.nudge.x || 0
-    //         y += viewmodel.nudge.y || 0
-    //     }
-    //     y -= 0.5 * 16
-    //     graphics.drawCircle(0, 0, viewmodel.radius)
-    //     // graphics2.drawCircle(0, 0, viewmodel.radius+1)
-    //     graphics.endFill()
-    //     // graphics2.endFill()
-    //     graphics.position.x = x
-    //     graphics.position.y = y
-    //     graphics.zIndex = (viewmodel.position.y * 10)
-    //     // graphics2.position.x = x
-    //     // graphics2.position.y = y
-    //     // graphics2.zIndex = (viewmodel.position.y * 10) - 1
-    //     pixi.addChild(graphics)
-    //     // pixi.addChild(graphics2)
-    //     return
-    // }
-    // sprite = sprite || new Pixi.Sprite()
-
-    if(viewmodel.image != undefined) {
-        if(Loader.resources[viewmodel.image] == undefined) {
-            console.log("Could not find image resource in loader.")
-            return
+    if(sprite instanceof Pixi.Graphics) {
+        if(viewmodel.radius != undefined) {
+            sprite.clear()
+            // const graphics2 = new Pixi.Graphics()
+            sprite.beginFill(viewmodel.color)
+            // graphics2.beginFill(viewmodel.color)
+            sprite.lineStyle(0)
+            // graphics2.lineStyle(1, 0x543935)
+            // graphics2.lineStyle(1, 0xfeeae0)
+            sprite.drawCircle(0, 0, viewmodel.radius)
+            sprite.endFill()
         }
-        sprite.texture = Loader.resources[viewmodel.image].texture
-        sprite.anchor = sprite.texture.defaultAnchor
+    }
+
+    if(sprite instanceof Pixi.Sprite) {
+        if(viewmodel.image != undefined) {
+            if(Loader.resources[viewmodel.image] == undefined) {
+                console.log("Could not find image resource in loader.")
+                return
+            }
+            sprite.texture = Loader.resources[viewmodel.image].texture
+            sprite.anchor = sprite.texture.defaultAnchor
+        }
     }
 
     if(viewmodel.position != undefined) {
@@ -172,6 +171,9 @@ function updatePixiSprite(viewmodel, sprite) {
         // if(sprite.position.stack != undefined) {
         //     sprite.zIndex += sprite.position.stack
         // }
+        if(sprite instanceof Pixi.Graphics) {
+            sprite.position.y -= Point.TILE / 2
+        }
     }
     if(viewmodel.nudge != undefined) {
         // why isn't this in a view model...

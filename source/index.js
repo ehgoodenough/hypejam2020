@@ -31,7 +31,6 @@ if(__STAGE__ === "DEVELOPMENT") {
 // Main Loop //
 //////////////
 
-import * as Preact from "preact"
 import Yaafloop from "yaafloop"
 
 // import View from "views/Mount.view.js"
